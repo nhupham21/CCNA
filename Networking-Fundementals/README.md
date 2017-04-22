@@ -64,5 +64,5 @@
 		![partial-mesh-topology](https://github.com/nhuhp/CCNA/blob/master/Networking-Fundementals/img/partial-mesh-topology.png)
 		+ Một số node nhất định sẽ được kết nối đến một node khác, nhưng có một node được kết nối với 2 hoặc nhiều node khác với một liên kết point-to-point.
 		+ Giảm thiểu được kết nối thừa trong full-mesh topology, ít phức tạp hơn full-mesh topology.
-		+ Đảm bảo được khả năng chịu lỗi vào chi phí triển khai.
+		+ Đảm bảo được khả năng chịu lỗi và chi phí triển khai.
 		
