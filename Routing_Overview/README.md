@@ -92,7 +92,7 @@
 			+ EIGRP là một advanced Distance-Vector, được cải tiến hơn so với distance-vector điển hình, chẳng hạn như sử dụng cơ chế triggered update, hội tụ nhanh, sử dụng thuật toán DUAL để lựa chọn đường đi,...
 			+ Link-state: giao thức định tuyến sử dụng các LSA quảng bá các mạng mà router biết cho nhau, từ đó xây dựng nên được một bản đồ mạng, sử dụng thuật toán Dijkstra để tìm đường đi. Ví dụ như OSPF, IS-IS
 
-![routing_protocol](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/routing_protocol.png)
+![routing_protocol](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/routing_protocol.jpg)
 
 * Nếu phân loại theo cách gửi Bảng tin định tuyến, thì:
 	- **Classful**: không gửi kèm subnet mask, không hỗ trợ VSLM, discontinuous network.
@@ -105,7 +105,7 @@
 * Một số giá trị AD của các giao thức định tuyến:
 
 |Route Source Default|Distance Values|
-|:----|:----|
+|:----|:----:|
 |Connected interface|0|
 |Static route|1|
 |Enhanced Interior Gateway Routing Protocol (EIGRP) summary route|5|
@@ -121,17 +121,25 @@
 |Internal BGP|200|
 |Unknown|255|
 
-[6. Metric](#metric)
+<a name="metric"></a>
+### 6. Metric
+* Mức độ ưu tiên giữa các đường đi trong một giao thức định tuyến.
+* Cũng giống như AD, giá trị Metric càng thấp thì độ ưu tiên càng cao.
 
-[7. Static Routing](#staticrouting)
+<a name="staticrouting"></a>
+### 7. Static Routing
 
-- [7.1. Khái niệm](#khainiemstaticrouting)
+<a name="khainiemstaticrouting"></a>
+#### 7.1. Khái niệm
 
-- [7.2. Cấu hình](#cauhinh)
+<a name="cauhinh"></a>
+#### 7.2. Cấu hình
 
-- [7.3. Dự phòng đường đi bằng AD](#duphongduongdibangad)
+<a name="duphongduongdibangad"></a>
+#### 7.3. Dự phòng đường đi bằng AD
 
-- [7.4. Default Route](#defaultroute)
+<a name="defaultroute"></a>
+#### 7.4. Default Route
 
 ---
 
