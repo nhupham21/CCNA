@@ -80,7 +80,8 @@
 * **Routed Protocol** là protocol có thể định tuyến dữ liệu. Ví dụ như IP, IPX and AppleTalk. Yêu cầu đối với loại protocol này là một sơ đồ địa chỉ. Dựa vào sơ đồ địa chỉ, bạn có thể xác định mạng mà host thuộc về, ngoài việc xác định host đó trong mạng đó. Tất cả các host trong internetwork (router, server và máy trạm) có thể sử dụng các dịch vụ của một routed protocol.
 * **Routing Protocol** là protocol chỉ được sử dụng giữa các router. Mục đích của nó là giúp các router xây dựng và duy trì các bảng định tuyến. Có một số loại routing protocol: path-vector, distance-vector, link-state,...
  
-[4. Phân loại Routing Protocol](#phanloairoutingprotocol)
+ <a name="phanloairoutingprotocol"></a>
+### 4. Phân loại Routing Protocol
 * Routing được chia thành 2 nhóm: Static và Dynamic.
 	- Static Routing: là kỹ thuật định tuyến mà người quản trị trực tiếp cấu hình định tuyến cho hệ thống mạng
 	- Dynamic Routing: là kỹ thuật định tuyến sử dụng các giao thức định tuyến để trao đổi thông tin định tuyến cho hệ thống mạng. Dynamic được chia thành 2 loại:
@@ -96,7 +97,9 @@
 * Nếu phân loại theo cách gửi Bảng tin định tuyến, thì:
 	- **Classful**: không gửi kèm subnet mask, không hỗ trợ VSLM, discontinuous network.
 	- **Classless**: gửi kèm subnet mask, hỗ trợ VSLM, discontinuous network.
-[5. Administrative Distance - AD](#AD)
+	
+<a name="AD"></a>	
+### 5. Administrative Distance - AD
 * **Administrative Distance** - AD: mức độ ưu tiên giữa các giao thức định tuyến.
 * AD càng thấp thì độ ưu tiên càng cao.
 * Một số giá trị AD của các giao thức định tuyến:
@@ -129,59 +132,6 @@ Unknown|255
 
 - [7.4. Default Route](#defaultroute)
 
-
-<a name="caidatvmware"></a>
-### 1. Cài đặt VMware Workstation
-
-**Các bước cài đặt:** ...
-
-...
-
-...
-
-...
-
-**Lỗi xảy ra:** ...
-
-...
-
-**Xử lý:** ...
-
-...
-
-<a name="caidatubuntu"></a>
-### 2. Cài đặt hệ điều hành Ubuntu
-
-<a name="chuanbi"></a>
-#### 2.1. Chuẩn bị
-
-...
-
-...
-
-...
-
-<a name="cacbuoccaidat"></a>
-#### 2.2. Các bước cài đặt
-
-**Bước 1:** ...
-
-...
-
-**Bước 2:** ...
-
-...
-
-**Bước 3:** ...
-
-...
-
-**Bước 4:** ...
-
-...
-
-...
-
 ---
 
 ### Tài liệu tham khảo:
@@ -199,13 +149,3 @@ Unknown|255
 ---
 
 ### Hết
-
-* Chức năng của Router.
-* Tìm hiểu về Routing Table.
-* Phân biệt Routing Protocol với Routed Protocol.
-* Phân loại Routing Protocol. Cho ví dụ với từng loại.
-* AD (Administrative Distance) là gì? Nêu các giá trị AD của một số Routing Protocol.
-* Metric là gì?
-* Static routing? Cách cấu hình? Dự phòng đường đi bằng AD?
-* Default route?
-
