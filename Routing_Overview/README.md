@@ -51,29 +51,29 @@
 	- Route timestamp: Định ra thời điểm cuối cùng route được học.
 	- Outgoing interface: Interface đầu ra dùng để forward một gói tin đến mạng đích. 
 
-![entry_routing_table]()
+![entry_routing_table](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/entry_routing_table.jpg)
 	
 * Bảng định tuyến là một cấu trúc phân cấp, được dùng để tăng tốc quá trình tìm kiếm khi định vị route và forward packet.
 * Đối với bảng định tuyến của Cisco, có thể chia route thành một số cấp độ như sau:	
 	- **Ultimate route**: là một route chứa IP next-hop hoặc là một outgoing interface.
 	
-	![ultimate_route]()
+	![ultimate_route](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/ultimate_route.jpg)
 	
 	- **Level 1 Route**: là một route có subnet mask bằng hoặc nhỏ hơn classful mask của một địa chỉ mạng. Một *level 1 route* có thể là:
 		+ **Network route**: có subnet mask bằng classful mask của địa chỉ mạng.
 		+ **Supernet route**: là một địa chỉ mạng có subnet mask nhỏ hơn classful mask, ví dụ như, một địa chỉ mạng.
 		+ **Default route**: là một static route có địa chỉ 0.0.0.0/0.
 		
-	![level_1_route]()
+	![level_1_route](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/level_1_route.jpg)
 	
 	- **Level 1 Parent Route**: là một *level 1 network route* mà được chia subnet. Một Parent route không phải là một ultimate route. Một level 1 parent route thường chứa địa chỉ mạng classful, số lượng subnet, và số lượng các subnet mask khác nhau mà địa chỉ classful có thể chia nhỏ được.
 	
-	![level_1_parent_route]()
+	![level_1_parent_route](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/level_1_parent_route.jpg)
 	
 	- **Level 2 Child Route**: là một route mà đó là subnet của một mạng classful.
 	  Một level 1 parent route chứa nhiều level 2 child route.
 	
-	![level_2_child_route]()
+	![level_2_child_route](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/level_2_child_route.jpg)
 	
 <a name="phanbietroutingvarouted"></a>
 ### 3. Phân biệt Routing Protocol với Routed Protocol
@@ -92,7 +92,7 @@
 			+ EIGRP là một advanced Distance-Vector, được cải tiến hơn so với distance-vector điển hình, chẳng hạn như sử dụng cơ chế triggered update, hội tụ nhanh, sử dụng thuật toán DUAL để lựa chọn đường đi,...
 			+ Link-state: giao thức định tuyến sử dụng các LSA quảng bá các mạng mà router biết cho nhau, từ đó xây dựng nên được một bản đồ mạng, sử dụng thuật toán Dijkstra để tìm đường đi. Ví dụ như OSPF, IS-IS
 
-![routing_protocol]()
+![routing_protocol](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/routing_protocol.png)
 
 * Nếu phân loại theo cách gửi Bảng tin định tuyến, thì:
 	- **Classful**: không gửi kèm subnet mask, không hỗ trợ VSLM, discontinuous network.
@@ -104,14 +104,13 @@
 * AD càng thấp thì độ ưu tiên càng cao.
 * Một số giá trị AD của các giao thức định tuyến:
 
-Route Source Default|Distance Values
-
-|Connected interface|0|
+|Route Source Default|Distance Values|
 |:----|:----|
-|Static route|1
+|Connected interface|0|
+|Static route|1|
 |Enhanced Interior Gateway Routing Protocol (EIGRP) summary route|5|
 |External Border Gateway Protocol (BGP)|20|
-||Internal EIGRP|90|
+|Internal EIGRP|90|
 |IGRP|100|
 |OSPF|110|
 |Intermediate System-to-Intermediate System (IS-IS)|115|
