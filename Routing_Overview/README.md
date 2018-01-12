@@ -82,6 +82,9 @@
  
  <a name="phanloairoutingprotocol"></a>
 ### 4. Phân loại Routing Protocol
+
+![routing_protocol](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/routing_protocol.jpg)
+
 * Routing được chia thành 2 nhóm: Static và Dynamic.
 	- Static Routing: là kỹ thuật định tuyến mà người quản trị trực tiếp cấu hình định tuyến cho hệ thống mạng
 	- Dynamic Routing: là kỹ thuật định tuyến sử dụng các giao thức định tuyến để trao đổi thông tin định tuyến cho hệ thống mạng. Dynamic được chia thành 2 loại:
@@ -91,8 +94,6 @@
 			+ Distance-Vector: trao đổi thông tin định tuyến bằng cách gửi theo định kỳ, toàn bộ bảng định tuyến sang cho láng giếng kết nối trực tiếp với nó. Ví dụ: RIP.
 			+ EIGRP là một advanced Distance-Vector, được cải tiến hơn so với distance-vector điển hình, chẳng hạn như sử dụng cơ chế triggered update, hội tụ nhanh, sử dụng thuật toán DUAL để lựa chọn đường đi,...
 			+ Link-state: giao thức định tuyến sử dụng các LSA quảng bá các mạng mà router biết cho nhau, từ đó xây dựng nên được một bản đồ mạng, sử dụng thuật toán Dijkstra để tìm đường đi. Ví dụ như OSPF, IS-IS
-
-![routing_protocol](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/routing_protocol.jpg)
 
 * Nếu phân loại theo cách gửi Bảng tin định tuyến, thì:
 	- **Classful**: không gửi kèm subnet mask, không hỗ trợ VSLM, discontinuous network.
@@ -104,7 +105,7 @@
 * AD càng thấp thì độ ưu tiên càng cao.
 * Một số giá trị AD của các giao thức định tuyến:
 
-|Route Source Default|Distance Values|
+|Route Source|Default Distance Values|
 |:----|:----:|
 |Connected interface|0|
 |Static route|1|
