@@ -105,20 +105,22 @@
 * Một số giá trị AD của các giao thức định tuyến:
 
 Route Source Default|Distance Values
-Connected interface|0
-Static route|1
-Enhanced Interior Gateway Routing Protocol (EIGRP) summary route|5
-External Border Gateway Protocol (BGP)|20
-Internal EIGRP|90
-IGRP|100
-OSPF|110
-Intermediate System-to-Intermediate System (IS-IS)|115
-Routing Information Protocol (RIP)|120
-Exterior Gateway Protocol (EGP)|140
-On Demand Routing (ODR)|160
-External EIGRP|170
-Internal BGP|200
-Unknown|255
+
+|Connected interface|0|
+|:----|:----|
+|Static route|1
+|Enhanced Interior Gateway Routing Protocol (EIGRP) summary route|5|
+|External Border Gateway Protocol (BGP)|20|
+||Internal EIGRP|90|
+|IGRP|100|
+|OSPF|110|
+|Intermediate System-to-Intermediate System (IS-IS)|115|
+|Routing Information Protocol (RIP)|120|
+|Exterior Gateway Protocol (EGP)|140|
+|On Demand Routing (ODR)|160|
+|External EIGRP|170|
+|Internal BGP|200|
+|Unknown|255|
 
 [6. Metric](#metric)
 
