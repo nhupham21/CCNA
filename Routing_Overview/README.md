@@ -39,6 +39,7 @@
 	- Duy trì, sử dụng bảng định tuyến. 
 	- Phân loại packet.
 	- Quản lý, kiểm tra, thống kê.
+	
 <a name="timhieuveroutingtable"></a>
 ### 2. Tìm hiểu về Routing Table
 * Một bảng định tuyến (routing table) gồm nhiều entry, mỗi entry chứa thông tin về các tuyến đường đến các đích khác nhau.
@@ -86,8 +87,8 @@
 ![routing_protocol](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/routing_protocol.jpg)
 
 * Routing được chia thành 2 nhóm: Static và Dynamic.
-	- Static Routing: là kỹ thuật định tuyến mà người quản trị trực tiếp cấu hình định tuyến cho hệ thống mạng
-	- Dynamic Routing: là kỹ thuật định tuyến sử dụng các giao thức định tuyến để trao đổi thông tin định tuyến cho hệ thống mạng. Dynamic được chia thành 2 loại:
+	- Static Routing: là phương thức định tuyến mà người quản trị trực tiếp cấu hình định tuyến cho hệ thống mạng
+	- Dynamic Routing: là phương thức định tuyến sử dụng các giao thức định tuyến để trao đổi thông tin định tuyến cho hệ thống mạng. Dynamic Routing sử dụng 2 loại giao thức:
 		+ EGP (exterior gateway protocol): giao thức định tuyến được sử dụng để trao đổi thông tin định tuyến giữa các AS khác nhau. 
 			Path-Vector: chứa các thông tin về gói tin đường đi đến một mạng cụ thể. Ví dụ: BGP.
 		+ IGP (Interior Gateway Protocol): giao thức định tuyến được sử dụng để trao đổi thông tin định tuyến trong cùng một AS. Trong IGP, được chia thành một số loại:
@@ -132,9 +133,24 @@
 
 <a name="khainiemstaticrouting"></a>
 #### 7.1. Khái niệm
-
+* Static Routing là phương thức định tuyến mà người quản trị sẽ trực tiếp cấu hình thông tin đường đi cho hệ thống mạng.
+* Ưu điểm:
+	- Cấu hình dễ dàng và nhanh chóng.
+	- Hỗ trợ nhiều thiết bị.
+	- Phù hợp với hệ thống mạng doanh nghiệp nhỏ, ít sự thay đổi về cấu trúc.
+	- Người quản trị có quyền kiểm soát điểu khiển bảng định tuyến.
+* Nhược điểm:
+	- Kích thước hệ thống mạng càng tăng thì cấu hình càng phức tạp.
+	- Không phù hợp vói các hệ thống mạng lớn vì không thích ứng được với sự thay đổi của hệ thống mạng lớn.
+	- Khả năng cập nhật đường đi bị hạn chế.
+	
 <a name="cauhinh"></a>
 #### 7.2. Cấu hình
+
+```
+R(config)# ip route {network} {mask} {Address|interface} [distance] [parmanent]
+```
+
 
 <a name="duphongduongdibangad"></a>
 #### 7.3. Dự phòng đường đi bằng AD
