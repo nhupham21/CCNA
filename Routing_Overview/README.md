@@ -148,13 +148,47 @@
 #### 7.2. Cấu hình
 
 ```
-R(config)# ip route {network} {mask} {Address|interface} [distance] [parmanent]
+R(config)# ip route {network} {mask} {address|interface} [distance] [parmanent]
 ```
 
+* Trong đó:
+	- network: Địa chỉ mạng của đích đến
+	- mask: Subnet Mask của địa chỉ mạng
+	- address: Địa chỉ IP của Router kế tiếp nối với mạng đích (khuyến cáo là nên sử dụng)
+	- interface: Tên interface đi đến mạng đích
+	- distance: giá trị AD cho route đi đến mạng đích
+	- parmanent: Quy định Router không bị thay đổi khi có 1 interface bị down
 
 <a name="duphongduongdibangad"></a>
 #### 7.3. Dự phòng đường đi bằng AD
+* Một số trường hợp yêu cầu cấu hình Static Route 2 đường về mạng đích sao cho lưu lượng ưu tiên đi 1 đường, đường còn lại chỉ để dự phòng. Khi đường chính gặp sự cố, lưu  lượng sẽ chuyển sang đi đường dự phòng. 
 
+
+![du_phong_voi_ad](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/du_phong_voi_ad.jpg)
+
+* Giả sử cấu hình Static Route trên R1 đi đến loopback 0 của R3 với đường **R1 --> R2 --> R3** là đường ưu tiên, đường **R1 --> R4 --> R3** là đường dự phòng. Đối với yêu cầu này, cấu hình Static Route trên R1 2 đường đi đến loopback 0 của R3 và sử dụng thêm thông số **distance**. Cụ thể:
+	- Như ta đã biết, đường nào có giá trị AD càng thấp thì càng được ưu tiên. Vậy khi cấu hình Static Route, đường nào ưu tiên thì cấu hình với giá trị distance thấp hơn của đường dự phòng.
+	- Trên R1 cấu hình như sau:
+	
+	![du_phong_voi_ad_2](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/du_phong_voi_ad_2.jpg)
+	
+	- Cấu hình Static Route 2 đường đi loopback 0 của R3. Mặc định giá trị distance sẽ là **1** nên chỉ cần cấu hình distance cho đường dự phòng cao hơn là được. Ở đây cấu hình distance là **10**.
+* Kiểm tra:
+	- Nếu không sử dụng distance thì cấu hình 2 đường đi đến loopback 0 của R3, `show ip route` trên R1, trên bảng định tuyến có kết quả như sau:
+	![show_ip_route](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/show_ip_route.jpg)
+	
+	- Nếu sử dụng distance thì `show ip route` trên R1 sẽ được:
+	![show_ip_route_2](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/show_ip_route_2.jpg)
+	
+	- Tiếp theo sử dụng `traceroute` đến mạng đích để kiểm tra đường đi của lưu lượng. Trên R1, vào privileged mode và gõ `traceroute 172.16.3.1`:
+	![traceroute](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/traceroute.jpg)
+	
+	- Sau đó, cũng trên R1, shutdown cổng e0/0:
+	![r1_shutdown_e00](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/r1_shutdown_e00.jpg)
+	
+	- Thực hiện `traceroute` một lần nữa:
+	![traceroute_2](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/traceroute_2.jpg)
+	
 <a name="defaultroute"></a>
 #### 7.4. Default Route
 
@@ -170,7 +204,7 @@ R(config)# ip route {network} {mask} {Address|interface} [distance] [parmanent]
 
 [4] Cisco Networking Academy's Introduction to Routing Dynamically. The Routing Table (3.5). http://www.ciscopress.com/articles/article.asp?p=2180210&seqNum=12
 
-[5] 
+[5] Static Route là gì?. http://vnpro.vn/thu-vien/static-route-la-gi-2045.html
 
 ---
 
