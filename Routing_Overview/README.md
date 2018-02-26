@@ -169,12 +169,12 @@ R(config)# ip route {network} {mask} {address|interface} [distance] [parmanent]
 * Giả sử cấu hình Static Route trên R1 đi đến loopback 0 của R3 với đường **R1 --> R2 --> R3** là đường ưu tiên, đường **R1 --> R4 --> R3** là đường dự phòng. Đối với yêu cầu này, cấu hình Static Route trên R1 2 đường đi đến loopback 0 của R3 và sử dụng thêm thông số **distance**. Cụ thể:
 	- Như ta đã biết, đường nào có giá trị AD càng thấp thì càng được ưu tiên. Vậy khi cấu hình Static Route, đường nào ưu tiên thì cấu hình với giá trị distance thấp hơn của đường dự phòng.
 	- Trên R1 cấu hình như sau:
-	
 	![du_phong_voi_ad_2](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/du_phong_voi_ad_2.jpg)
-	
+
 	- Cấu hình Static Route 2 đường đi loopback 0 của R3. Mặc định giá trị distance sẽ là **1** nên chỉ cần cấu hình distance cho đường dự phòng cao hơn là được. Ở đây cấu hình distance là **10**.
 * Kiểm tra:
 	- Nếu không sử dụng distance thì cấu hình 2 đường đi đến loopback 0 của R3, `show ip route` trên R1, trên bảng định tuyến có kết quả như sau:
+	
 	![show_ip_route](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/show_ip_route.jpg)
 	
 	- Nếu sử dụng distance thì `show ip route` trên R1 sẽ được:
