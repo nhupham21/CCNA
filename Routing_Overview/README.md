@@ -283,7 +283,7 @@ R(config)# ip route {network} {mask} {address|interface} [distance] [parmanent]
 
 [5] Static Route là gì? http://vnpro.vn/thu-vien/static-route-la-gi-2045.html
 
-[] IP sla static route tracking. http://svuit.vn/threads/lab-1-1-ip-sla-static-route-tracking-203/
+[6] IP sla static route tracking. http://svuit.vn/threads/lab-1-1-ip-sla-static-route-tracking-203/
 ---
 
 ### Hết
