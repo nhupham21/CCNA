@@ -211,7 +211,7 @@ R(config)# ip route {network} {mask} {address|interface} [distance] [parmanent]
 		```
 		R1(config)#ip sla schedule 1 start-time now life forever
 		```
-		+ Sau đó, áp ip sla với một **track**. Track này có ý nghĩa như sau. Kết quả trở về của một track là **up** hoặc **down**. Nếu R1 ping được tới đầu 192.168.23.3 thì track sẽ trả về kết quả **Up**. Nếu R1 không ping dược tới đầu 192.168.23.3 thì track sẽ trả về **Down**, R1 sẽ biết được dường này gặp sự cố và sẽ chuyển sang đường dự phòng. Cấu hình như sau:
+		+ Sau đó, áp ip sla với một **track**. Track này có ý nghĩa như sau. Kết quả trở về của một track là **up** hoặc **down**. Nếu R1 ping được tới đầu 192.168.23.3 thì track sẽ trả về kết quả **Up**. Nếu R1 không ping dược tới đầu 192.168.23.3 thì track sẽ trả về **Down**, R1 sẽ biết được đường này gặp sự cố và sẽ chuyển sang đường dự phòng. Cấu hình như sau:
 		```
 		R1(config)#track 1 ip sla 1
 		```
@@ -261,7 +261,6 @@ R(config)# ip route {network} {mask} {address|interface} [distance] [parmanent]
 
 	```
 	R(config)# ip route 0.0.0.0 0.0.0.0 {address|interface} [distance] [parmanent]
-
 	```
 	
 * Kiểm tra:
