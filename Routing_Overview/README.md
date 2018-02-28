@@ -4,7 +4,7 @@
 > 
 > Thực hiện: **Phạm Hoàng Nhu**
 > 
-> Cập nhật lần cuối: **20/12/2017**
+> Cập nhật lần cuối: **28/02/2018**
 
 ### Mục lục
 [1. Chức năng của Router](#chucnangcuarouter)
@@ -284,6 +284,7 @@ R(config)# ip route {network} {mask} {address|interface} [distance] [parmanent]
 [5] Static Route là gì? http://vnpro.vn/thu-vien/static-route-la-gi-2045.html
 
 [6] IP sla static route tracking. http://svuit.vn/threads/lab-1-1-ip-sla-static-route-tracking-203/
+
 ---
 
 ### Hết
