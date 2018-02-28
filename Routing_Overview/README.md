@@ -196,8 +196,78 @@ R(config)# ip route {network} {mask} {address|interface} [distance] [parmanent]
 	
 	- Kết quả là sau khi shutdown đường chính, lưu lượng sẽ chuyển sang đi đường dự phòng.
 	
+* Lưu ý:
+	- Đối với bài lab trên, sẽ có issue thế này: Khi cấu hình đường đi dự phòng với AD, Router sẽ chỉ nhận biết sự thay đổi của các mạng kết nối trực tiếp với nó. Giả sử, vẫn sơ đồ mạng như trên, mạng 192.168.23.0/24 gặp sự cố. Lớp mạng này nằm trên đường đi chính từ R1 để loopback 0 của R3 và nó không kết nối trực tiếp với R1. Vậy R1 làm cách nào để nhận biết được đường chính gặp sự cố và chuyển sang đường dự phòng?
+	- Để giải quyết vấn đề này, người ta thường sử dụng đến **ip sla** để **tracking** đường đi, cụ thể như sau:
+		+ Trên R1, cấu hình **ip sla** để thực hiện ping liên tục đến đầu 192.168.23.3.
+		
+		```
+		R1(config)#ip sla 1
+		R1(config-ip-sla)#icmp-echo 192.168.23.3
+		R1(config-ip-sla-echo)#frequency 5
+		```
+		
+		+ Thiết lập thời điểm bắt đầu và thời gian thực hiện cho sla.
+		```
+		R1(config)#ip sla schedule 1 start-time now life forever
+		```
+		+ Sau đó, áp ip sla với một **track**. Track này có ý nghĩa như sau. Kết quả trở về của một track là **up** hoặc **down**. Nếu R1 ping được tới đầu 192.168.23.3 thì track sẽ trả về kết quả **Up**. Nếu R1 không ping dược tới đầu 192.168.23.3 thì track sẽ trả về **Down**, R1 sẽ biết được dường này gặp sự cố và sẽ chuyển sang đường dự phòng. Cấu hình như sau:
+		```
+		R1(config)#track 1 ip sla 1
+		```
+		
+		![track](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/track.jpg)
+		
+		+ Cấu hình track vào lệnh cấu hình static route cho đường đi chính. Chú ý là phải xóa lệnh cấu hình đường chính trước rồi mới cấu hình lại.
+		
+		```
+		R1(config)#no ip route 172.16.3.1 255.255.255.255 192.168.12.2
+		R1(config)#ip route 172.16.3.1 255.255.255.255 192.168.12.2 track 1 
+		```
+	- Kiểm tra:
+		+ Ban đầu trên R1, thực hiện `traceroute` đến 172.16.3.1.
+		
+		![kiem_tra_track](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/kiem_tra_track.jpg)
+		
+		+ Sau đó, trên R3, `shutdown` cổng e0/1.
+		
+		![kiem_tra_track_2](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/kiem_tra_track_2.jpg)
+		
+		+ Trên R1 lúc này sẽ xuất hiện log thông báo rằng track từ trạng thái **Up** chuyển thành **Down**.
+		
+		![kiem_tra_track_3](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/kiem_tra_track_3.jpg)
+		
+		+ Trên R1, `traceroute` lại 1 lần nữa.
+		
+		![kiem_tra_track_4](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/kiem_tra_track_4.jpg)
+		
+		+ Như vậy, lưu lượng đã chuyển sang đi đường dự phòng.
+		
+		+ Quay lại R3, `no shudown` cổng e0/1, thì trên R1, track sẽ chuyển trạng thái sang **Up** trở lại.
+		
+		![kiem_tra_track_5](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/kiem_tra_track_5.jpg)
+		
+		+ Cuối cùng, `traceroute` trên R1.
+		
+		![kiem_tra_track_6](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/kiem_tra_track_6.jpg)
+		
+		+ Đường đi chính đã được khôi phục.
+		
 <a name="defaultroute"></a>
 #### 7.4. Default Route
+* **Default route** là đường mà router sẽ sử dụng trong trường hợp router không tìm thấy đường nào phù hợp trong bảng định tuyến để tới đích của gói dữ liệu. Người ta thường cấu hình đường ra internet cho router là đường default route vì router không cần lưu thông tin của từng mạng trên internet.
+* Default route là một trường hợp đặc biệt của static route.
+* Cấu hình:
+
+	```
+	R(config)# ip route 0.0.0.0 0.0.0.0 {address|interface} [distance] [parmanent]
+
+	```
+	
+* Kiểm tra:
+	- Khi dùng lệnh `show ip route` mà thấy dòng route có kí hiệu `S*` thì chính là default route.
+	
+	![default_route](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/default_route.jpg)
 
 ---
 
@@ -211,8 +281,9 @@ R(config)# ip route {network} {mask} {address|interface} [distance] [parmanent]
 
 [4] Cisco Networking Academy's Introduction to Routing Dynamically. The Routing Table (3.5). http://www.ciscopress.com/articles/article.asp?p=2180210&seqNum=12
 
-[5] Static Route là gì?. http://vnpro.vn/thu-vien/static-route-la-gi-2045.html
+[5] Static Route là gì? http://vnpro.vn/thu-vien/static-route-la-gi-2045.html
 
+[] IP sla static route tracking. http://svuit.vn/threads/lab-1-1-ip-sla-static-route-tracking-203/
 ---
 
 ### Hết
