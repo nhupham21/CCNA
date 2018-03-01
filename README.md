@@ -1,4 +1,4 @@
-# Chương Trình CCNAX 200-120
+# Chương Trình CCNAX 200-125
 Tham khảo: 
 
 CCNA Routing and Switching Study Guide - Todd Lammle - Sybex
@@ -16,15 +16,16 @@ Computer Networking A Top Down Approach 6th Edition
 ## 4. Easy Subnetting, VLSMs, Summarization and Troubleshooting TCP/IP
 ## 5. Cisco's Internetworking Operating System (IOS), Managing a Cisco Internetwork
 ## 6. Managing Cisco Devices
-## 7. IP Routing
-## 8. OSPF, Multi-Area OSPF
-## 9. EIGRP
-## 10. Layer 2 Switching
-## 11. VLANs and InterVLAN Routing 
-## 12. Enhanced Switched Technologies
-## 13. IP Services
-## 14. Security
-## 15. NAT
-## 16. IPv6
-## 17. Troubleshooting IP, IPv6 and VLANs
-## 18. Wide Area Networks
+[## 7. IP Routing Overview, Static Route](https://github.com/nhuhp/CCNA/tree/master/Routing_Overview)
+## 8. Dynamic Routing, RIP
+## 9. OSPF, Multi-Area OSPF
+## 10. EIGRP
+## 11. Layer 2 Switching
+## 12. VLANs and InterVLAN Routing 
+## 13. Enhanced Switched Technologies
+## 14. IP Services
+## 15. Security
+## 16. NAT
+## 17. IPv6
+## 18. Troubleshooting IP, IPv6 and VLANs
+## 19. Wide Area Networks
