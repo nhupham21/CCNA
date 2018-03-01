@@ -10,7 +10,7 @@ Odom W. - Cisco CCENT-CCNA ICND2 200-101 Official Cert Guide - 2013
 Computer Networking A Top Down Approach 6th Edition 
 
 # Contents
-## 1. Networking Fudementals
+## [1. Networking Fudementals](https://github.com/nhuhp/CCNA/tree/master/Networking_Fundementals)
 ## 2. Ethernet Networking and Data Enscapsulation
 ## 3. Introduction to TCP/IP
 ## 4. Easy Subnetting, VLSMs, Summarization and Troubleshooting TCP/IP
