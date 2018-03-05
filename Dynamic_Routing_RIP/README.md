@@ -7,11 +7,8 @@
 > Cập nhật lần cuối: **05/03/2018**
 
 ### Mục lục
-
 [1. Dynamic Routing](#dynamicrouting)
-
 [2. Distance Vector Protocol](#distancevectorprotocol)
-
 [3. RIP](#rip)
 - [3.1. Tổng quan về RIP](#tongquanverip)
 - [3.2. Nguyên lý hoạt động của RIP](#nguyenlyhoatdong)
