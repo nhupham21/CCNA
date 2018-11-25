@@ -75,9 +75,43 @@
 
 ![rip_connected](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_connected.png)
 
-* Khi cấu hình định tuyến RIP.
+* Khi cấu hình định tuyến RIP, các Router kết nối trực tiếp sẽ trao đổi các gói tin với nhau, định kỳ 30s/lần. Gói tin này chứa thông tin (hoặc một phần) bản định tuyến của Router gửi đi.
 
-
+* Các 2 loại gói tin cơ bản trong quá trình hoạt động của RIP:
+	- **RIP Request**: Message được gửi bởi một Router tới một Router khác để yêu cầu gửi cho nó toàn bộ hoặc một phần bảng định tuyến.
+	-**RIP Response**: Message được gửi bởi một Router, chứa các thông tin của toàn bộ hoặc một phần bảng định tuyến của nó. Gói tin này không chỉ phản hồi lại cho một RIP Request Message.
+	- Lưu ý: Giao thức RIP gốc cũng định nghĩa một số loại gói tin khác. Tuy nhiên không còn được sử dụng và đã được loại bỏ từ RIP v2 và RIPng.
+	
+* Quá trình hoạt động cụ thể như sau:
+	- Khi cấu hình RIP, Router R1 sẽ gửi RIP Request đến địa chỉ Multicast 224.0.0.9 để yêu cầu các Router láng giềng gửi bảng định tuyến cho nó.  
+	![rip_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_1.png)
+	
+	- Và cứ 30s/lần, nó sẽ gửi RIP Response đến 224.0.0.9, chứa thông tin bảng định tuyến của nó.
+	![rip_2](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_2.png)
+	
+	- Router 2, khi cấu hình RIP, cũng sẽ gửi RIP Request đến 224.0.0.9.
+	![rip_3](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_3.png)
+	
+	- Khi đó, Router 1 và Router 2 sẽ đồng thời gửi cho nhau RIP Response chứa thông tin bảng định tuyến của chúng.
+	![rip_4](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_4.png)
+	
+	- Cứ như thế, cứ 30s/lần, các Router lại gửi RIP Response đến 224.0.0.9 để cập nhật bảng định tuyến.
+	![rip_5](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_5.png)
+	
+	- Quá trình diễn ra tương tự đối với Router R3.
+	![rip_6](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_6.png)
+	
+	![rip_7](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_7.png)
+	
+	- Router R2 gửi RIP Response cho Router R3.
+	![rip_8](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_8.png)
+	
+	- Router R1 gửi RIP Response cho Router R1.
+	![rip_9](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_9.png)
+	
+	- Cuối cùng, bảng định tuyến của các Router sẽ như sau.
+	![rip_after](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_after.png)
+	
 <a name="metric"></a>
 #### 3.3. Cách tính Metric trong RIP
 

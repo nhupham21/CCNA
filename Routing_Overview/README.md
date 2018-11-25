@@ -52,7 +52,7 @@
 	- Route timestamp: Định ra thời điểm cuối cùng route được học.
 	- Outgoing interface: Interface đầu ra dùng để forward một gói tin đến mạng đích. 
 
-![entry_routing_table](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/entry_routing_table.jpg)
+![entry_routing_table](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_connected.png)
 	
 * Bảng định tuyến là một cấu trúc phân cấp, được dùng để tăng tốc quá trình tìm kiếm khi định vị route và forward packet.
 * Đối với bảng định tuyến của Cisco, có thể chia route thành một số cấp độ như sau:	
@@ -92,7 +92,7 @@
 		+ EGP (exterior gateway protocol): giao thức định tuyến được sử dụng để trao đổi thông tin định tuyến giữa các AS khác nhau. 
 			Path-Vector: chứa các thông tin về gói tin đường đi đến một mạng cụ thể. Ví dụ: BGP.
 		+ IGP (Interior Gateway Protocol): giao thức định tuyến được sử dụng để trao đổi thông tin định tuyến trong cùng một AS. Trong IGP, được chia thành một số loại:
-			+ Distance-Vector: trao đổi thông tin định tuyến bằng cách gửi theo định kỳ, toàn bộ bảng định tuyến sang cho láng giếng kết nối trực tiếp với nó. Ví dụ: RIP.
+			+ Distance-Vector: trao đổi thông tin định tuyến bằng cách gửi theo định kỳ, toàn bộ bảng định tuyến sang cho láng giềng kết nối trực tiếp với nó. Ví dụ: RIP.
 			+ EIGRP là một advanced Distance-Vector, được cải tiến hơn so với distance-vector điển hình, chẳng hạn như sử dụng cơ chế triggered update, hội tụ nhanh, sử dụng thuật toán DUAL để lựa chọn đường đi,...
 			+ Link-state: giao thức định tuyến sử dụng các LSA quảng bá các mạng mà router biết cho nhau, từ đó xây dựng nên được một bản đồ mạng, sử dụng thuật toán Dijkstra để tìm đường đi. Ví dụ như OSPF, IS-IS
 
