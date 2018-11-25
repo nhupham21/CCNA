@@ -79,7 +79,7 @@
 
 * Các 2 loại gói tin cơ bản trong quá trình hoạt động của RIP:
 	- **RIP Request**: Message được gửi bởi một Router tới một Router khác để yêu cầu gửi cho nó toàn bộ hoặc một phần bảng định tuyến.
-	-**RIP Response**: Message được gửi bởi một Router, chứa các thông tin của toàn bộ hoặc một phần bảng định tuyến của nó. Gói tin này không chỉ phản hồi lại cho một RIP Request Message.
+	- **RIP Response**: Message được gửi bởi một Router, chứa các thông tin của toàn bộ hoặc một phần bảng định tuyến của nó. Gói tin này không chỉ phản hồi lại cho một RIP Request Message.
 	- Lưu ý: Giao thức RIP gốc cũng định nghĩa một số loại gói tin khác. Tuy nhiên không còn được sử dụng và đã được loại bỏ từ RIP v2 và RIPng.
 	
 * Quá trình hoạt động cụ thể như sau:
