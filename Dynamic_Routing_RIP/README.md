@@ -163,7 +163,7 @@
 <a name="splithorizon"></a>
 ##### 3.4.3. Split - Horizon
 * **Split Horizon** là một trong những cơ chế chống loop được sử dụng bởi các Distance-Vector Routing Protocol.
-* Nguyên tắc: *Một router sẽ không quảng bá một route trở lại interface mà nó đã học route này từ đó*
+* Nguyên tắc: *Một router sẽ không quảng bá một route trở lại interface mà nó đã học route này từ đó.*
 * Mô tả:
 	- R3 kết nối trực tiếp với 10.4.0.0/24. Các Router đều chạy RIP, R3 quảng bá mạng 10.4.0.0/24 cho các Router còn lại. R2 nhận được route đến 10.4.0.0/24 và sẽ tiếp tục quảng bá mạng này đến R1.
 	![split_horizon_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/split_horizon_1.png)
@@ -178,8 +178,9 @@
 ![split_horizon_4](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/split_horizon_4.png)
 
 * Cấu hình:
+	```
 	Router(config-if)# [no] ip split-horizon
-	
+	```
 <a name="routepoisoning"></a>
 ##### 3.4.4. Route Poisoning
 
