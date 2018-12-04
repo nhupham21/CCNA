@@ -16,11 +16,13 @@
 - [3.2. Nguyên lý hoạt động của RIP](#nguyenlyhoatdong)
 - [3.3. Cách tính Metric trong RIP](#metric)
 - [3.4. Bộ quy tắc chống loop của RIP](#quytacchongloop)
-	+ [3.4.1. Split - Horizon](#splithorizon)
-	+ [3.4.2. Route Poisoning](#routepoisoning)
-	+ [3.4.3. Poison Reverse](#poisonreverse)
-	+ [3.4.4. Triggered Update](#triggeredupdate)
-	+ [3.4.5. Hold-down Timers](#holddowntimers)
+	+ [3.4.1. Loop trong RIP](#looptrongrip)
+	+ [3.4.2. Giới hạn Metric](#gioihanmetric)
+	+ [3.4.3. Split - Horizon](#splithorizon)
+	+ [3.4.4. Route Poisoning](#routepoisoning)
+	+ [3.4.5. Poison Reverse](#poisonreverse)
+	+ [3.4.6. Triggered Update](#triggeredupdate)
+	+ [3.4.7. Hold-down Timers](#holddowntimers)
 - [3.5. Các bộ Timers sử dụng trong RIP](#cacbotimer)
 - [3.6. cấu hình RIP](#cauhinh)
 - [3.7. Passive-interface trong RIP](#passiveinterface)
@@ -83,6 +85,9 @@
 	- Lưu ý: Giao thức RIP gốc cũng định nghĩa một số loại gói tin khác. Tuy nhiên không còn được sử dụng và đã được loại bỏ từ RIP v2 và RIPng.
 	
 * Quá trình hoạt động cụ thể như sau (quá trình được theo dõi bằng cách capture các gói tin bằng Wireshark):
+	- Cấu hình RIP:
+	![rip_config](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_config.png)
+
 	- Khi cấu hình RIP, Router R1 sẽ gửi RIP Request đến địa chỉ Multicast 224.0.0.9 để yêu cầu các Router láng giềng gửi bảng định tuyến cho nó.  
 	![rip_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_1.png)
 	
@@ -116,24 +121,76 @@
 	
 <a name="metric"></a>
 #### 3.3. Cách tính Metric trong RIP
+* Đối với RIP, metric được tính bằng Hop-count. Nghĩa là số node layer 3 trên đường đi đến đích. 
+* Metric bắt đầu từ 0 cho các mạng connected. Metric sẽ tăng lên **1** khi qua một node.	
+![rip_metric](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_metric.png)
 
 <a name="quytacchongloop"></a>
 #### 3.4. Bộ quy tắc chống loop của RIP
 
-<a name="splithorizon"></a>
-##### 3.4.1. Split - Horizon
+<a name="looptrongrip"></a>
+##### 3.4.1. Loop trong RIP
+* Giả sử R3 mất mạng 10.4.0.0, chỉ còn 10.1.0.0, 10.2.0.0, 10.3.0.0.
+![rip_loop_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_loop_1.png)
 
+* Trong quá trình trao đổi bảng định tuyến RIP, R2 sẽ gửi lại route đến 10.4.0.0 cho R3 và tăng metric của route này. R3 sẽ học thêm mạng 10.4.0.0 thông qua cổng E0.
+![rip_loop_2](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_loop_2.png)
+
+* Tiếp theo, R3 cập nhật bảng định tuyến và gửi cho R2. Lúc này mạng 10.4.0.0 được đưa đến R2 với metric bằng 3.
+![rip_loop_3](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_loop_3.png)
+
+* Sau đó, R2 gửi bảng định tuyến tới các Router láng giềng.
+![rip_loop_4](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_loop_4.png)
+
+* Cứ tiếp tục như thế thì bảng định tuyến của các Router sẽ thay đổi Metric liên tục. Các route liên tục gửi theo vòng tròn, tạo thành Loop trong mạng.
+* Hiện tượng loop ảnh hưởng đến CPU, performance của thiết bị, khiến hệ thống không hoạt động được.
+* Vì vậy, để khắc phục hiện tượng Loop khi sử dụng RIP, người ta đã đưa ra các cơ chế chống Loop cho RIP:
+	- Giới hạn Metric
+	- Split - Horizon
+	- Route Poisoning
+	- Poison Reverse
+	- Triggered Update
+	- Các bộ đếm Timers
+	
+* Lưu ý: Khi bật RIP thì mặc định các cơ chế chống Loop cũng đã hoạt động.
+
+<a name="gioihanmetric"></a>
+##### 3.4.2. Giới hạn Metric
+* Metric được giới hạn đến 16. Vậy thì Router bật RIP mà thấy mạng nào có Metric = 16 thì mạng sẽ bị loại bỏ mặc dù là mạng Connected.
+* Metric = 16 được gọi là **Infinite Metric**.
+* Do bị giới hạn về metric, nên RIP chỉ được sử dụng cho hạ tầng mạng nhỏ (đường kính < 16 Router).
+
+<a name="splithorizon"></a>
+##### 3.4.3. Split - Horizon
+* **Split Horizon** là một trong những cơ chế chống loop được sử dụng bởi các Distance-Vector Routing Protocol.
+* Nguyên tắc: *Một router sẽ không quảng bá một route trở lại interface mà nó đã học route này từ đó*
+* Mô tả:
+	- R3 kết nối trực tiếp với 10.4.0.0/24. Các Router đều chạy RIP, R3 quảng bá mạng 10.4.0.0/24 cho các Router còn lại. R2 nhận được route đến 10.4.0.0/24 và sẽ tiếp tục quảng bá mạng này đến R1.
+	![split_horizon_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/split_horizon_1.png)
+	
+	- Ta thấy rằng, R2 gửi bảng định tuyến của mình, bao gồm cả mạng 10.4.0.0/24 cho R1 thông qua cổng E0. Khi R1 cập nhật bảng định tuyến, và tiếp tục gửi bảng định tuyến cho R2, Split Horizon sẽ ngăn cản R1 quảng bá 10.4.0.0/24 ngược lại cho R2 thông qua cổng E0 của mình.
+	![split_horizon_2](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/split_horizon_2.png)
+
+	- Gói tin RIP Response bắt được trên cổng E0 của R1.
+	![split_horizon_3](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/split_horizon_3.png)
+	
+* Split Horizon mặc định enable trên interface. Dùng lệnh "**show ip interface [tên_interface]**" để kiểm tra.
+![split_horizon_4](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/split_horizon_4.png)
+
+* Cấu hình:
+	Router(config-if)# [no] ip split-horizon
+	
 <a name="routepoisoning"></a>
-##### 3.4.2. Route Poisoning
+##### 3.4.4. Route Poisoning
 
 <a name="poisonreverse"></a>
-##### 3.4.3. Poison Reverse
+##### 3.4.5. Poison Reverse
 
 <a name="triggeredupdate"></a>
-##### 3.4.4. Triggered Update
+##### 3.4.6. Triggered Update
 
 <a name="holddowntimers"></a>
-##### 3.4.5. Hold-down Timers
+##### 3.4.7. Hold-down Timers
 
 <a name="cacbotimer"></a>
 #### 3.5. Các bộ Timers sử dụng trong RIP
@@ -155,7 +212,8 @@
 
 [2] Routing Information Protocol. https://en.wikipedia.org/wiki/Routing_Information_Protocol
 
-[3] 
+[3] Split Horizon explained. https://geek-university.com/ccna/split-horizon-explained/
+
 
 ---
 
