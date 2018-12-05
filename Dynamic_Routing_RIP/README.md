@@ -19,10 +19,9 @@
 	+ [3.4.1. Loop trong RIP](#looptrongrip)
 	+ [3.4.2. Giới hạn Metric](#gioihanmetric)
 	+ [3.4.3. Split - Horizon](#splithorizon)
-	+ [3.4.4. Route Poisoning](#routepoisoning)
-	+ [3.4.5. Poison Reverse](#poisonreverse)
-	+ [3.4.6. Triggered Update](#triggeredupdate)
-	+ [3.4.7. Hold-down Timers](#holddowntimers)
+	+ [3.4.4. Route Poisoning](#routepoisoning-poisonreverse)
+	+ [3.4.5. Triggered Update](#triggeredupdate)
+	+ [3.4.6. Hold-down Timers](#holddowntimers)
 - [3.5. Các bộ Timers sử dụng trong RIP](#cacbotimer)
 - [3.6. cấu hình RIP](#cauhinh)
 - [3.7. Passive-interface trong RIP](#passiveinterface)
@@ -130,10 +129,10 @@
 
 <a name="looptrongrip"></a>
 ##### 3.4.1. Loop trong RIP
-* Giả sử R3 mất mạng 10.4.0.0, chỉ còn 10.1.0.0, 10.2.0.0, 10.3.0.0.
+* Giả sử R3 mất mạng 10.4.0.0, trong bảng định tuyến chỉ còn 10.1.0.0, 10.2.0.0, 10.3.0.0.
 ![rip_loop_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_loop_1.png)
 
-* Trong quá trình trao đổi bảng định tuyến RIP, R2 sẽ gửi lại route đến 10.4.0.0 cho R3 và tăng metric của route này. R3 sẽ học thêm mạng 10.4.0.0 thông qua cổng E0.
+* R2 gửi Update, sẽ gửi lại route đến 10.4.0.0 cho R3 và tăng metric của route này. R3 sẽ học thêm mạng 10.4.0.0 thông qua cổng E0.
 ![rip_loop_2](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_loop_2.png)
 
 * Tiếp theo, R3 cập nhật bảng định tuyến và gửi cho R2. Lúc này mạng 10.4.0.0 được đưa đến R2 với metric bằng 3.
@@ -157,7 +156,7 @@
 <a name="gioihanmetric"></a>
 ##### 3.4.2. Giới hạn Metric
 * Metric được giới hạn đến 16. Vậy thì Router bật RIP mà thấy mạng nào có Metric = 16 thì mạng sẽ bị loại bỏ mặc dù là mạng Connected.
-* Metric = 16 được gọi là **Infinite Metric**.
+* Metric = 16 được gọi là **Infinite Metric**. Mỗi Routing Protocol định nghĩa giá trị Infinite Metric khác nhau. Với RIP là 16.
 * Do bị giới hạn về metric, nên RIP chỉ được sử dụng cho hạ tầng mạng nhỏ (đường kính < 16 Router).
 
 <a name="splithorizon"></a>
@@ -165,7 +164,7 @@
 * **Split Horizon** là một trong những cơ chế chống loop được sử dụng bởi các Distance-Vector Routing Protocol.
 * Nguyên tắc: *Một router sẽ không quảng bá một route trở lại interface mà nó đã học route này từ đó.*
 * Mô tả:
-	- R3 kết nối trực tiếp với 10.4.0.0/24. Các Router đều chạy RIP, R3 quảng bá mạng 10.4.0.0/24 cho các Router còn lại. R2 nhận được route đến 10.4.0.0/24 và sẽ tiếp tục quảng bá mạng này đến R1.
+	- R3 kết nối trực tiếp với 10.4.0.0/24. Các Router đều chạy RIP, R3 quảng bá mạng 10.4.0.0/24 cho các Router còn lại. R2 nhận được route đến 10.4.0.0/24, cập nhật bảng định tuyến và tiếp tục quảng bá đến R1.
 	![split_horizon_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/split_horizon_1.png)
 	
 	- Ta thấy rằng, R2 gửi bảng định tuyến của mình, bao gồm cả mạng 10.4.0.0/24 cho R1 thông qua cổng E0. Khi R1 cập nhật bảng định tuyến, và tiếp tục gửi bảng định tuyến cho R2, Split Horizon sẽ ngăn cản R1 quảng bá 10.4.0.0/24 ngược lại cho R2 thông qua cổng E0 của mình.
@@ -174,6 +173,8 @@
 	- Gói tin RIP Response bắt được trên cổng E0 của R1.
 	![split_horizon_3](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/split_horizon_3.png)
 	
+	- Cơ chế diễn ra tương tự với mạng 10.3.0.0/24.
+	
 * Split Horizon mặc định enable trên interface. Dùng lệnh "**show ip interface [tên_interface]**" để kiểm tra.
 ![split_horizon_4](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/split_horizon_4.png)
 
@@ -181,23 +182,42 @@
 	```
 	Router(config-if)# [no] ip split-horizon
 	```
-<a name="routepoisoning"></a>
-##### 3.4.4. Route Poisoning
-
-<a name="poisonreverse"></a>
-##### 3.4.5. Poison Reverse
-
+<a name="routepoisoning-poisonreverse"></a>
+##### 3.4.4. Route Poisoning và Poison Reverse	
+* **Route Poisoning** cũng là một cơ chế chống Loop được sử dụng bởi các Distance-Vector Routing Protocol.
+* Nguyên tắc: *Khi một Router xác định được một route connect của nó bị down, nó sẽ quảng bá route bị down này với infinite metric (metric = 16). Những Router nào nhận được quảng bá này, sẽ xét route bị down và loại nó ra khỏi bảng định tuyến của mình.*
+* Mô tả:
+	- Giả sử mạng 10.4.0.0/24 kết nối với R3 bị down. R3 sẽ chuyển metric của route tới 10.4.0.0/24 thành 16 và quảng bá một "Poisoning Message" cho R2. 
+	![routepoisoning_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/routepoisoning_1.png)
+	
+	- Gói tin RIP Response bắt được trên cổng E0 của R3.
+	![routepoisoning_2](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/routepoisoning_2.png)
+	
+	- R2 nhận được quảng bá này, R2 sẽ thực hiện 3 việc:
+		+ Xét route tới 10.4.0.0/24 thành Possibly Down.
+		![routepoisoning_3](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/routepoisoning_3.png)
+		
+		+ Gửi Update cho R3 để thông báo rằng nó đã nhận được thông tin 10.4.0.0/24 bị down. Đây chính là cơ chế **Poison Reverse**.
+		![routepoisoning_4](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/routepoisoning_4.png)
+		
+		+ Sau đó, quảng bá cho R1.
+		![routepoisoning_5](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/routepoisoning_5.png)
+		
+		+ R1 nhận Update và trả lời bằng "Poison Reverse".
+		![routepoisoning_6](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/routepoisoning_6.png)
+		
 <a name="triggeredupdate"></a>
-##### 3.4.6. Triggered Update
+##### 3.4.5. Triggered Update
+* Router sẽ gửi cập nhật bảng định tuyến khi có sự thay đổi diễn ra trong bảng định tuyến của nó mà không cần phải đợi 30s.
 
 <a name="holddowntimers"></a>
-##### 3.4.7. Hold-down Timers
+##### 3.4.6. Hold-down Timers
 
 <a name="cacbotimer"></a>
 #### 3.5. Các bộ Timers sử dụng trong RIP
 
 <a name="cauhinh"></a>
-#### 3.6. cấu hình RIP
+#### 3.6. Cấu hình RIP
 
 <a name="passiveinterface"></a>
 #### 3.7. Passive-interface trong RIP
@@ -215,6 +235,9 @@
 
 [3] Split Horizon explained. https://geek-university.com/ccna/split-horizon-explained/
 
+[4] Distance Vector and Link State Protocols. https://www.youtube.com/watch?v=ygxBBMztT4U
+
+[5] Distance Vector - Split Horizon, Poison Reverse, Route Poisoning Explained. https://www.youtube.com/watch?v=SkvPNnVzY5A 
 
 ---
 
