@@ -19,13 +19,14 @@
 	+ [3.4.1. Loop trong RIP](#looptrongrip)
 	+ [3.4.2. Giới hạn Metric](#gioihanmetric)
 	+ [3.4.3. Split - Horizon](#splithorizon)
-	+ [3.4.4. Route Poisoning](#routepoisoning-poisonreverse)
+	+ [3.4.4. Route Poisoning và Poison Reverse](#routepoisoning-poisonreverse)
 	+ [3.4.5. Triggered Update](#triggeredupdate)
 	+ [3.4.6. Hold-down Timers](#holddowntimers)
 - [3.5. Các bộ Timers sử dụng trong RIP](#cacbotimer)
 - [3.6. cấu hình RIP](#cauhinh)
 - [3.7. Passive-interface trong RIP](#passiveinterface)
-- [3.8. RIPv1 vs. RIPv2](#ripv1vsripv2)
+- [3.8. Authentication trong RIP](#authentication)
+- [3.9. RIPv1 vs. RIPv2](#ripv1vsripv2)
 
 ---
 
@@ -180,14 +181,16 @@
 
 * Cấu hình:
 	```
+	Router(config)#interface [interface-name]
+	
 	Router(config-if)# [no] ip split-horizon
 	```
 <a name="routepoisoning-poisonreverse"></a>
 ##### 3.4.4. Route Poisoning và Poison Reverse	
 * **Route Poisoning** cũng là một cơ chế chống Loop được sử dụng bởi các Distance-Vector Routing Protocol.
-* Nguyên tắc: *Khi một Router xác định được một route connect của nó bị down, nó sẽ quảng bá route bị down này với infinite metric (metric = 16). Những Router nào nhận được quảng bá này, sẽ xét route bị down và loại nó ra khỏi bảng định tuyến của mình.*
+* Nguyên tắc: *Khi một Router xác định được một route connect của nó unreachable, nó sẽ quảng bá route này với infinite metric (metric = 16). Những Router nào nhận được quảng bá này, sẽ xét route bị down và loại nó ra khỏi bảng định tuyến của mình.*
 * Mô tả:
-	- Giả sử mạng 10.4.0.0/24 kết nối với R3 bị down. R3 sẽ chuyển metric của route tới 10.4.0.0/24 thành 16 và quảng bá một "Poisoning Message" cho R2. 
+	- Giả sử mạng 10.4.0.0/24 kết nối với R3 unreachable. R3 sẽ chuyển metric của route tới 10.4.0.0/24 thành 16 và quảng bá một "Poisoning Message" cho R2. 
 	![routepoisoning_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/routepoisoning_1.png)
 	
 	- Gói tin RIP Response bắt được trên cổng E0 của R3.
@@ -197,7 +200,7 @@
 		+ Xét route tới 10.4.0.0/24 thành Possibly Down.
 		![routepoisoning_3](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/routepoisoning_3.png)
 		
-		+ Gửi Update cho R3 để thông báo rằng nó đã nhận được thông tin 10.4.0.0/24 bị down. Đây chính là cơ chế **Poison Reverse**.
+		+ Gửi Update cho R3 để thông báo rằng nó đã nhận được thông tin 10.4.0.0/24 unreachable. Đây chính là cơ chế **Poison Reverse**.
 		![routepoisoning_4](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/routepoisoning_4.png)
 		
 		+ Sau đó, quảng bá cho R1.
@@ -212,18 +215,124 @@
 
 <a name="holddowntimers"></a>
 ##### 3.4.6. Hold-down Timers
+* Một cơ chế chống Loop khác là **Hold-down Timer**. Cơ chế này hoạt động như sau:
+	- Khi một Router nhận được một update thông báo có một route bị unreachable, nó sẽ đưa route này về trạng thái **Possibly Down** và khởi động một Timer (đối với RIP, Hold-down Timer = 180s).
+	- Trong thời gian đếm của Timer, Router sẽ không nhận bất kỳ thông báo update về route này từ các Router ngoại trừ Router đã gửi thông báo route này đầu tiên. Đồng thời, Router sẽ quảng bá route này đi với trạng thái unreachable, metric = 16.
 
 <a name="cacbotimer"></a>
 #### 3.5. Các bộ Timers sử dụng trong RIP
+* RIP sử dụng một số bộ Timer, tất cả được tính bằng giây (second), cụ thể như sau:
+	- **Update**: chu kỳ mà các gói Update được gửi ra. Mặc định là 30s.
+	- **Invalid**: nếu không nhận được bất kỳ gói Update nào về một route trong khoảng thời gian này, mặc định là 180s, tính từ gói Update gần nhất nhận được, route này sẽ được xem như *invalid*, được quảng bá đi với trạng thái unreachable, metric = 16, tuy nhiên route này vẫn được sử dụng đến forward gói tin. Hết Timer này sẽ chuyển sang Hold-down Timer.
+	- **Hold-down**: đưa route sang trạng thái **Possibly Down** và bắt đầu Timer, mặc định là 180s. Trong thời gian này, Router sẽ quảng bá route này đi với trạng thái unreachable. Tuy nhiên, route này vẫn được sử dụng để forward gói tin.
+	- **Flush**: tính từ gói Update gần nhất nhận được, cho đến hết Flush Timer, mặc định là 240s, Router không nhận được bất kỳ gói Update nào về route, Router sẽ loại route đó ra khỏi bảng định tuyến của mình.
+	![timer_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/timer_2.png)
+	
+* Để kiểm tra các bộ timer này trên thiết bị, sử dụng lệnh `show ip protocols`.
+![timer_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/timer_2.png)
+ 
+* Cấu hình thay đổi các bộ Timer:
+```
+Router(config)#router rip
+
+Router(config-router)#timers basic [Update]	[Invalid] [Holddown] [Flush]
+```
 
 <a name="cauhinh"></a>
 #### 3.6. Cấu hình RIP
-
+* Cấu hình RIP.
+	- Bật RIP.
+	```
+	Router(config)#router rip
+	``` 
+	- Cấu hình version RIP.
+	```
+	Router(config-router)#version [version-number]
+	```
+	- Cấu hình network.
+	```
+	Router(config-router)#network [major-network]
+	```
+	- Cấu hình tắt auto summary.
+	```
+	Router(config-router)#no auto-summary
+	```
+	
+* Kiểm tra.
+	- Kiểm tra các entry RIP trên bảng định tuyến.
+	```
+	Router#show ip route rip
+	```
+	- Kiểm tra các thông số của RIP.
+	```
+	Router#show ip protocols
+	```
+		
 <a name="passiveinterface"></a>
 #### 3.7. Passive-interface trong RIP
+* Thông thường, khi cấu hình RIP, mặc định thiết bị sẽ gửi các gói tin Update ra tất cả interface nối trực tiếp với nó. Như đã biết là các gói tin của RIP mặc định không được mã hóa. Việc kết nối đến tới end-user là khá nguy hiểm vì end-user có thể dễ dàng bắt được các gói tin này và thấy được thông tin RIP. 
+![passiveinterface_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/passiveinterface_1.png)
+
+* Để khắc phục hiện tượng này, người ta sử dụng Passive-interface đối với các interface kết nối với end-user. Passive-interface có tác dụng ngăn RIP không gửi Update ra các interface được cấu hình passive-interface. 
+![passiveinterface_2](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/passiveinterface_2.png)
+
+* Cấu hình passiveinterface.
+```
+Router(config)#router rip
+
+Router(config-router)#passive-interface [interface-name]
+```
+
+<a name="authentication"></a>
+#### 3.8. Authentication trong RIP
+* Một nhược điểm dễ thấy của RIP là các Router chạy RIP đều hoàn toàn tin tưởng vào các Router láng giềng. Attacker có thể lợi dụng điều này để có thể xâm nhập, truy xuất được thông tin của hệ thống bằng cách giả lập một Router giả mạo và tìm cách trao đổi RIP với hệ thống. Do đó, việc xác thực (Authentication) giữa các Router trong quá trình chạy RIP rất cần thiết.
+* Cấu hình Authentication.
+	- Tạo **Key chain**. Key chain xác định một chuỗi key có thể sử dụng trên interface. Một Key chan có thể chứa nhiều Key. Key chain không cần giống nhau giữa các Router. Nếu không cấu hình Key chain, thì không thực hiện authentication được trên interface đó.
+	```
+	Router(config)#key chain [key-chain-name]
+	```
+	- Tạo **KeyID**. KeyID là một ID number định danh dùng để định danh Key trên Key chain. KeyID không cần giống nhau giữa các Router.
+	```
+	Router(config-keychain)#key [keyID]
+	```
+	- Tạo **Key String**. Key String dùng để xác thực giữa các Router và phải giống nhau giữa các Router.
+	```
+	Router(config-keychain-key)#key-string [keystring]
+	```
+	- Bật authentication trên interface quảng bá RIP. Cấu hình 2 đầu link trao đổi RIP.
+	```
+	Router(config)#interface [interface-name]
+	
+	Router(config-if)#ip rip authentication key-chain [key-chain-name]
+	```
+	- Chọn mode Authentication. Authentication RIP có 2 mode: Plain Text và MD5. Trong quá trình Authentication, mặc định key-string sẽ được trao đổi dưới dạng Plain Text.
+	- Cấu hình Plain Text Authentication ở 2 đầu link.
+	```
+		Router(config)#interface [interface-name]
+		
+		Router(config-if)#ip rip authentication mode text
+		```
+	- Yêu cầu để cấu hình MD5 Authentication.
+		+ RIP version 2.
+		+ KeyID và Key-string phải giống nhau ở 2 đầu link.
+		+ 2 đầu link đều phải cấu hình MD5 Authentication:
+		```
+		Router(config)#interface [interface-name]
+		
+		Router(config-if)#ip rip authentication mode md5
+		```
 
 <a name="ripv1vsripv2"></a>
-#### 3.8. RIPv1 vs. RIPv2
+#### 3.9. RIPv1 vs. RIPv2
+||RIPv1|RIPv2|
+|:----|:---:|:---:|
+|Routing Protocol|Classful|Classless|
+|Support VLSM|No|Yes|
+|Gửi Subnet Mask kèm theo gói Update|No|Yes|
+|Loại địa chỉ|Broadcast(255.255.255.255.)|Multicast(224.0.0.9)|
+|Định nghĩa trong|RFC 1058|RFC 1721, 1722, 2453|
+|Support summary bằng tay|No|Yes|
+|Authentication|No|Yes|
 
 ---
 
@@ -237,7 +346,15 @@
 
 [4] Distance Vector and Link State Protocols. https://www.youtube.com/watch?v=ygxBBMztT4U
 
-[5] Distance Vector - Split Horizon, Poison Reverse, Route Poisoning Explained. https://www.youtube.com/watch?v=SkvPNnVzY5A 
+[5] Distance Vector - Split Horizon, Poison Reverse, Route Poisoning Explained. https://www.youtube.com/watch?v=SkvPNnVzY5A
+
+[6] RIP Timers Debug. https://networklessons.com/rip/rip-timers-debug/
+
+[7] How basic are RIP timers? Test your knowledge now. https://blog.ine.com/2010/04/15/how-basic-are-rip-timers-test-your-knowledge-now
+
+[8] RIP Timers. http://lostintransit.se/2011/10/15/rip-timers/
+
+[9] Holddown timer Explained. https://geek-university.com/ccna/holddown-timer-explained/
 
 ---
 
