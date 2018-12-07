@@ -226,16 +226,16 @@
 	- **Invalid**: nếu không nhận được bất kỳ gói Update nào về một route trong khoảng thời gian này, mặc định là 180s, tính từ gói Update gần nhất nhận được, route này sẽ được xem như *invalid*, được quảng bá đi với trạng thái unreachable, metric = 16, tuy nhiên route này vẫn được sử dụng đến forward gói tin. Hết Timer này sẽ chuyển sang Hold-down Timer.
 	- **Hold-down**: đưa route sang trạng thái **Possibly Down** và bắt đầu Timer, mặc định là 180s. Trong thời gian này, Router sẽ quảng bá route này đi với trạng thái unreachable. Tuy nhiên, route này vẫn được sử dụng để forward gói tin.
 	- **Flush**: tính từ gói Update gần nhất nhận được, cho đến hết Flush Timer, mặc định là 240s, Router không nhận được bất kỳ gói Update nào về route, Router sẽ loại route đó ra khỏi bảng định tuyến của mình.
-	![timer_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/timer_2.png)
+	![timer_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/timer_1.png)
 	
 * Để kiểm tra các bộ timer này trên thiết bị, sử dụng lệnh `show ip protocols`.
-![timer_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/timer_2.png)
+![timer_2](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/timer_2.png)
  
 * Cấu hình thay đổi các bộ Timer:
 ```
 Router(config)#router rip
 
-Router(config-router)#timers basic [Update]	[Invalid] [Holddown] [Flush]
+Router(config-router)#timers basic [Update] [Invalid] [Holddown] [Flush]
 ```
 
 <a name="cauhinh"></a>
@@ -271,10 +271,10 @@ Router(config-router)#timers basic [Update]	[Invalid] [Holddown] [Flush]
 <a name="passiveinterface"></a>
 #### 3.7. Passive-interface trong RIP
 * Thông thường, khi cấu hình RIP, mặc định thiết bị sẽ gửi các gói tin Update ra tất cả interface nối trực tiếp với nó. Như đã biết là các gói tin của RIP mặc định không được mã hóa. Việc kết nối đến tới end-user là khá nguy hiểm vì end-user có thể dễ dàng bắt được các gói tin này và thấy được thông tin RIP. 
-![passiveinterface_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/passiveinterface_1.png)
+![passive_interface_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/passive_interface_1.png)
 
 * Để khắc phục hiện tượng này, người ta sử dụng Passive-interface đối với các interface kết nối với end-user. Passive-interface có tác dụng ngăn RIP không gửi Update ra các interface được cấu hình passive-interface. 
-![passiveinterface_2](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/passiveinterface_2.png)
+![passive_interface_2](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/passive_interface_2.png)
 
 * Cấu hình passiveinterface.
 ```
@@ -291,27 +291,32 @@ Router(config-router)#passive-interface [interface-name]
 	```
 	Router(config)#key chain [key-chain-name]
 	```
+	
 	- Tạo **KeyID**. KeyID là một ID number định danh dùng để định danh Key trên Key chain. KeyID không cần giống nhau giữa các Router.
 	```
 	Router(config-keychain)#key [keyID]
 	```
+	
 	- Tạo **Key String**. Key String dùng để xác thực giữa các Router và phải giống nhau giữa các Router.
 	```
 	Router(config-keychain-key)#key-string [keystring]
 	```
+	
 	- Bật authentication trên interface quảng bá RIP. Cấu hình 2 đầu link trao đổi RIP.
 	```
 	Router(config)#interface [interface-name]
 	
 	Router(config-if)#ip rip authentication key-chain [key-chain-name]
 	```
+	
 	- Chọn mode Authentication. Authentication RIP có 2 mode: Plain Text và MD5. Trong quá trình Authentication, mặc định key-string sẽ được trao đổi dưới dạng Plain Text.
 	- Cấu hình Plain Text Authentication ở 2 đầu link.
 	```
-		Router(config)#interface [interface-name]
+	Router(config)#interface [interface-name]
 		
-		Router(config-if)#ip rip authentication mode text
-		```
+	Router(config-if)#ip rip authentication mode text
+	```
+		
 	- Yêu cầu để cấu hình MD5 Authentication.
 		+ RIP version 2.
 		+ KeyID và Key-string phải giống nhau ở 2 đầu link.
@@ -329,7 +334,7 @@ Router(config-router)#passive-interface [interface-name]
 |Routing Protocol|Classful|Classless|
 |Support VLSM|No|Yes|
 |Gửi Subnet Mask kèm theo gói Update|No|Yes|
-|Loại địa chỉ|Broadcast(255.255.255.255.)|Multicast(224.0.0.9)|
+|Loại địa chỉ|Broadcast (255.255.255.255)|Multicast (224.0.0.9)|
 |Định nghĩa trong|RFC 1058|RFC 1721, 1722, 2453|
 |Support summary bằng tay|No|Yes|
 |Authentication|No|Yes|
