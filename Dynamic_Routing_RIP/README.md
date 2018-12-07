@@ -211,7 +211,7 @@
 		
 <a name="triggeredupdate"></a>
 ##### 3.4.5. Triggered Update
-* Router sẽ gửi cập nhật bảng định tuyến khi có sự thay đổi diễn ra trong bảng định tuyến của nó mà không cần phải đợi 30s.
+* Router sẽ gửi cập nhật bảng định tuyến khi có sự thay đổi diễn ra trong bảng định tuyến của nó mà không cần phải đợi gửi gói Update theo chu kỳ.
 
 <a name="holddowntimers"></a>
 ##### 3.4.6. Hold-down Timers
