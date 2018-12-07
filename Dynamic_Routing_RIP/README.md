@@ -4,7 +4,7 @@
 > 
 > Thực hiện: **Phạm Hoàng Nhu**
 > 
-> Cập nhật lần cuối: **25/11/2018**
+> Cập nhật lần cuối: **07/12/2018**
 
 ### Mục lục
 [1. Dynamic Routing](#dynamicrouting)
@@ -360,6 +360,8 @@ Router(config-router)#passive-interface [interface-name]
 [8] RIP Timers. http://lostintransit.se/2011/10/15/rip-timers/
 
 [9] Holddown timer Explained. https://geek-university.com/ccna/holddown-timer-explained/
+
+[10] Sample Configuration for Authentication in RIPv2. https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13719-50.html
 
 ---
 
