@@ -8,7 +8,9 @@
 
 ### Mục lục
 [1. Dynamic Routing](#dynamicrouting)
+
 [2. Distance Vector Protocol](#distancevectorprotocol)
+
 [3. RIP](#rip)
 - [3.1. Tổng quan về RIP](#tongquanverip)
 - [3.2. Nguyên lý hoạt động của RIP](#nguyenlyhoatdong)
@@ -64,7 +66,7 @@
 * Tổng quan:
 	- RIP là giao thức chuẩn mở của IEEE.
 	- RIP là một Distance-vector Protocol.
-	- Hoạt động dựa trên thuật toán Bellman-Ford.
+	- Chọn đường đi dựa trên thuật toán Bellman-Ford.
 	- RIP sử dụng UDP port 520.
 	- RIP có 2 version là RIPv1 (hỗ trợ mạng classful) và RIPv2 (hỗ trợ mạng classless).
 	- AD = 120, Metric = Hop-count.
@@ -82,7 +84,7 @@
 	- **RIP Response**: Message được gửi bởi một Router, chứa các thông tin của toàn bộ hoặc một phần bảng định tuyến của nó. Gói tin này không chỉ phản hồi lại cho một RIP Request Message.
 	- Lưu ý: Giao thức RIP gốc cũng định nghĩa một số loại gói tin khác. Tuy nhiên không còn được sử dụng và đã được loại bỏ từ RIP v2 và RIPng.
 
-* Quá trình tính toán route dựa trên thuật toán Bellman-Ford.	
+* Quá trình tính toán đường đi dựa trên thuật toán Bellman-Ford.	
 
 * Quá trình hoạt động cụ thể như sau (quá trình được theo dõi bằng cách capture các gói tin bằng Wireshark):
 	- Cấu hình RIP:
