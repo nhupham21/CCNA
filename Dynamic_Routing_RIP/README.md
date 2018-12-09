@@ -8,9 +8,7 @@
 
 ### Mục lục
 [1. Dynamic Routing](#dynamicrouting)
-			
 [2. Distance Vector Protocol](#distancevectorprotocol)
-
 [3. RIP](#rip)
 - [3.1. Tổng quan về RIP](#tongquanverip)
 - [3.2. Nguyên lý hoạt động của RIP](#nguyenlyhoatdong)
@@ -23,7 +21,7 @@
 	+ [3.4.5. Triggered Update](#triggeredupdate)
 	+ [3.4.6. Hold-down Timers](#holddowntimers)
 - [3.5. Các bộ Timers sử dụng trong RIP](#cacbotimer)
-- [3.6. cấu hình RIP](#cauhinh)
+- [3.6. Cấu hình RIP](#cauhinh)
 - [3.7. Passive-interface trong RIP](#passiveinterface)
 - [3.8. Authentication trong RIP](#authentication)
 - [3.9. RIPv1 vs. RIPv2](#ripv1vsripv2)
@@ -66,6 +64,7 @@
 * Tổng quan:
 	- RIP là giao thức chuẩn mở của IEEE.
 	- RIP là một Distance-vector Protocol.
+	- Hoạt động dựa trên thuật toán Bellman-Ford.
 	- RIP sử dụng UDP port 520.
 	- RIP có 2 version là RIPv1 (hỗ trợ mạng classful) và RIPv2 (hỗ trợ mạng classless).
 	- AD = 120, Metric = Hop-count.
@@ -74,7 +73,6 @@
 <a name="nguyenlyhoatdong"></a>
 #### 3.2. Nguyên lý hoạt động của RIP
 * Khi chưa cấu hình định tuyến, bảng định tuyến của các Router chỉ chứa các lớp mạng connected.
-
 ![rip_connected](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_connected.png)
 
 * Khi cấu hình định tuyến RIP, các Router kết nối trực tiếp sẽ trao đổi các gói tin với nhau, định kỳ 30s/lần. Gói tin này chứa thông tin (hoặc một phần) bản định tuyến của Router gửi đi.
@@ -83,18 +81,20 @@
 	- **RIP Request**: Message được gửi bởi một Router tới một Router khác để yêu cầu gửi cho nó toàn bộ hoặc một phần bảng định tuyến.
 	- **RIP Response**: Message được gửi bởi một Router, chứa các thông tin của toàn bộ hoặc một phần bảng định tuyến của nó. Gói tin này không chỉ phản hồi lại cho một RIP Request Message.
 	- Lưu ý: Giao thức RIP gốc cũng định nghĩa một số loại gói tin khác. Tuy nhiên không còn được sử dụng và đã được loại bỏ từ RIP v2 và RIPng.
-	
+
+* Quá trình tính toán route dựa trên thuật toán Bellman-Ford.	
+
 * Quá trình hoạt động cụ thể như sau (quá trình được theo dõi bằng cách capture các gói tin bằng Wireshark):
 	- Cấu hình RIP:
 	![rip_config](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_config.png)
 
-	- Khi cấu hình RIP, Router R1 sẽ gửi RIP Request đến địa chỉ Multicast 224.0.0.9 để yêu cầu các Router láng giềng gửi bảng định tuyến cho nó.  
+	- Khi cấu hình RIP, Router R1 sẽ gửi RIP Request đến địa chỉ Multicast 224.0.0.9 ra các interface kết nối để yêu cầu các Router láng giềng gửi bảng định tuyến cho nó.  
 	![rip_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_1.png)
 	
 	- Và cứ 30s/lần, nó sẽ gửi RIP Response đến 224.0.0.9, chứa thông tin bảng định tuyến của nó. 
 	![rip_2](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_2.png)
 	
-	- Router 2, khi cấu hình RIP, cũng sẽ gửi RIP Request đến 224.0.0.9.
+	- Router 2, khi cấu hình RIP, cũng sẽ gửi RIP Request đến 224.0.0.9, đi ra các interface kết nối.
 	![rip_3](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_3.png)
 	
 	- Khi đó, Router 1 và Router 2 sẽ đồng thời gửi cho nhau RIP Response chứa thông tin bảng định tuyến của chúng. 
@@ -273,7 +273,7 @@ Router(config-router)#timers basic [Update] [Invalid] [Holddown] [Flush]
 * Thông thường, khi cấu hình RIP, mặc định thiết bị sẽ gửi các gói tin Update ra tất cả interface nối trực tiếp với nó. Như đã biết là các gói tin của RIP mặc định không được mã hóa. Việc kết nối đến tới end-user là khá nguy hiểm vì end-user có thể dễ dàng bắt được các gói tin này và thấy được thông tin RIP. 
 ![passive_interface_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/passive_interface_1.png)
 
-* Để khắc phục hiện tượng này, người ta sử dụng Passive-interface đối với các interface kết nối với end-user. Passive-interface có tác dụng ngăn RIP không gửi Update ra các interface được cấu hình passive-interface. 
+* Để khắc phục hiện tượng này, người ta sử dụng **Passive-interface** đối với các interface kết nối với end-user. Passive-interface có tác dụng ngăn RIP không gửi Update ra các interface được cấu hình passive-interface. 
 ![passive_interface_2](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/passive_interface_2.png)
 
 * Cấu hình passiveinterface.
@@ -320,7 +320,7 @@ Router(config-router)#passive-interface [interface-name]
 	- Yêu cầu để cấu hình MD5 Authentication.
 		+ RIP version 2.
 		+ KeyID và Key-string phải giống nhau ở 2 đầu link.
-		+ 2 đầu link đều phải cấu hình MD5 Authentication:
+		+ 2 đầu link đều phải cấu hình MD5 Authentication.
 		```
 		Router(config)#interface [interface-name]
 		
