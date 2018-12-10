@@ -18,7 +18,7 @@ Computer Networking A Top Down Approach 6th Edition
 ## 6. Managing Cisco Devices
 ## [7. IP Routing Overview, Static Route](https://github.com/nhuhp/CCNA/tree/master/Routing_Overview)
 ## [8. Dynamic Routing, RIP](https://github.com/nhuhp/CCNA/tree/master/Dynamic_Routing_RIP)
-## 9. OSPF
+## [9. OSPF](https://github.com/nhuhp/CCNA/tree/master/OSPF)
 ## 10. EIGRP
 ## 11. Layer 2 Switching
 ## 12. VLANs and InterVLAN Routing 
