@@ -4,23 +4,31 @@
 > 
 > Thực hiện: **Phạm Hoàng Nhu**
 > 
-> Cập nhật lần cuối: **09/12/2018**
+> Cập nhật lần cuối: **12/12/2018**
 
 ### Mục lục
 [1. Link-state Protocol](#linkstateprotocol)
 
-
-
 [2. OSPF](#ospf)
 - [2.1. Tổng quan về OSPF](#tongquanveospf)
 - [2.2. Hệ thống phân cấp](#hethongphancap)
-- [2.3. Nguyên lý hoạt động của OSPF](#nguyenlyhoatdong)
-- [2.4. Cách tính Cost trong OSPF](#cost)
-- [2.5. Cấu hình OSPF](#cauhinh)
-	+ [2.5.1. Wildcard Mask](#wildcardmask)
-	+ [2.5.2. Cấu hình OSPF](#cauhinhospf)
-- [2.6. Passive-interface trong OSPF](#passiveinterface)
-- [2.7. Authentication trong OSPF](#authentication)
+	+ [2.2.1. Hierarchical Topology](#hierarchicaltopology)
+	+ [2.2.2. Router Roles trong OSPF Hierarchical Topology](#routerrole)
+- [2.3. Network Types](#networktypes)
+	+ [2.3.1. Point-to-Point Network](#pointtopoint)
+	+ [2.3.2. Multi-access Broadcast Network](#multiaccess)
+	+ [2.3.3. Non-broadcast Multi-access Network](#nbma)
+- [2.4. Nguyên lý hoạt động của OSPF](#nguyenlyhoatdong)
+	+ [2.4.1. Chọn Router ID](#routerid)
+	+ [2.4.2. Thiết lập Adjacency](#thietlapddjacency)
+	+ [2.4.3. ](#tinhtoanduongdi)
+	+ [2.4.4. Xây dựng và duy trì bảng định tuyến](#routingtable)
+- [2.5. Cách tính Metric trong OSPF](#metric)
+- [2.6. Cấu hình OSPF](#cauhinh)
+	+ [2.6.1. Wildcard Mask](#wildcardmask)
+	+ [2.6.2. Cấu hình OSPF](#cauhinhospf)
+- [2.7. Passive-interface trong OSPF](#passiveinterface)
+- [2.8. Authentication trong OSPF](#authentication)
 
 ---
 
@@ -56,8 +64,9 @@
 <a name="tongquanveospf"></a>
 #### 2.1. Tổng quan về OSPF
 * Lịch sử.
-	- OSPF lần đầu được chuẩn hóa vào năm 1989, RFC 1131, được biết là OSPF version 1.
-	- Được định nghĩa OSPF version 2 trong RFC 2328 năm 1998 cho IPv4.
+	- OSPF lần đầu được chuẩn hóa vào năm 1989, RFC 1131, được xem như là OSPF version 1.
+	- OSPF version 2 được thay thế năm 1991 trong RFC 1247.
+	- Kể từ đó có nhiều bản sửa đổi OSPF version 2 trong RFC 1583, 2178 và 2328.
 	- Bản cập nhật cho IPv6 được xem như là OSPF version 3 trong RFC 5340 năm 2008.
 * Tổng quan.
 	- Là IGP.
@@ -65,8 +74,8 @@
 	- Sử dụng thuật toán Dijkstra để tìm đường đi tốt nhất.
 	- Sử dụng khái niệm **Area** trong thiết kế và triển khai hệ thống phân cấp.
 	- Hỗ trợ mạng Classless, cho phép thiết kế phân cấp với các kỹ thuật VLSM, Route Summarization.
-	- Giao tiếp các peer bằng các bảng tin LSA.
-	- Protocol number = 89.
+	- Giao tiếp với các peer bằng các bảng tin Link-state Advertisement (LSA).
+	- Protocol ID number = 89.
 	- AD = 110.
 	- Metric phụ thuộc vào Bandwidth.
 
@@ -110,9 +119,64 @@
 	- Dựa vào định nghĩa trên, ta có: Router A, B, C, D, H là những Backbone Router.
 	- Tuy nhiên, có ý kiến cho rằng, Backbone Router là những Router nằm trong Backbone Area và chỉ có kết nối đến các Backbone Router khác. Theo quan điểm này thì chỉ có Router A là Backbone Router.
 	
-<a name="nguyenlyhoatdong"></a>
-#### 2.2. Nguyên lý hoạt động của OSPF
+<a name="networktypes"></a>	
+#### 2.3. Network Types
 
+* Có 3 loại môi trường mạng (**Network Types**) được định nghĩa trong OSPF:
+	- Point-to-Point Network
+	- Broadcast Multi-access Network
+	- Non-Broadcast Multi-access Network
+	
+<a name="pointtopoint"></a>	
+##### 2.3.1. Point-to-Point Network
+* Là một kết nối của 2 Router.
+* Sử dụng serial link (HDLC, PPP).
+* Không có sự bầu chọn Designated Router (DR) và Backup Designated Router (BDR).
+* Các Hello Packet đều được gửi đến địa chỉ Multcast 224.0.0.5.
+![pointtopoint_1](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/pointtopoint_1.png)
+
+
+<a name="multiaccess"></a>
+##### 2.3.2. Broadcast Multi-access Network
+* Môi trường Ethernet.
+* Giả sử, khi trao đổi LSA, một Router phải nói chuyện với tất cả các Router còn lại. Như vậy tất cả các kết nối là khá lớn. Có thể sẽ gây ảnh hưởng đến traffic của hệ thống.
+![multiaccess_2](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/multiaccess_2.png)
+	
+* Do đó, OSPF đã định nghĩa ra **Designated Router**. Designated Router (DR) sẽ là điểm trung tâm cho việc trao đổi thông tin định tuyến giữa các Router trong miền Broadcast Multi-access Network.
+	- DR thiết lập neighbor với các Router còn lại.
+	- DR thu thập và gửi đi các thông tin LSA cho các Router.
+
+* **Backup Designated Router** (BDR) là Router dự phòng cho DR. Nếu trường hợp DR không hoạt động thì BDR sẽ chiếm quyền và trở thành DR.
+	- BDR cũng thiết lập neighbor với các Router còn lại.
+
+<a name="nbma"></a>
+##### 2.3.3. Non-Broadcast Multi-access Network
+
+
+<a name="nguyenlyhoatdong"></a>
+#### 2.4. Nguyên lý hoạt động của OSPF
+
+<a name="routerid"></a>	
+##### 2.4.1. Chọn Router ID
+* Trong OSPF, mỗi Router cần phải có một **Router ID**. Router ID được dùng để cung cấp một định danh duy nhất trong môi trường OSPF.
+* Router ID có dạng là một **IPv4 Address** A.B.C.D, 32 bit, nhưng không phải là IP.
+* Router ID được chọn theo thứ tự như sau: 
+	- 1. Cấu hình bằng lệnh.
+	```
+	Router(config)#router ospf [process-id]
+	Router(config-router)#router-id [A.B.C.D]
+	```
+	
+	- Nếu không cấu hình bằng lệnh:
+	
+		+ 2. IP của Loopback Interface có địa chỉ cao nhất sẽ được chọn là Router ID của Router.
+		
+		+ 3. Nếu không có Loopback Interface nào được cấu hình, thì IP của Interface đang **Active** có địa chỉ cao nhất sẽ là Router ID của Router.
+
+* Sau khi cấu hình OSPF, Router ID có thể chưa được áp dụng với thứ tự trên. Vì vậy sau khi cấu hình OSPF xong, sử dụng lệnh sau để reset các OSPF Process và Router ID có thể được lựa chọn đúng.
+```
+Router#clear ip ospf process
+```
 
 ---
 
@@ -125,6 +189,9 @@
 [3] OSPF Hierarchical Topology, Areas and Router Roles. http://www.tcpipguide.com/free/t_OSPFHierarchicalTopologyAreasandRouterRoles.htm
 
 [4] What is OSPF Area, OSPF Hierarchical Network Design, and advantages of OSPF Areas. http://www.omnisecu.com/cisco-certified-network-associate-ccna/what-is-ospf-area-hierarchical-network-design-and-advantages-of-ospf-areas.php
+
+[5] OSPF Desginated and Backup Designated Router. http://nguyenvcuong.blogspot.com/2012/05/ospf-desginated-and-backup-designated.html
+
 
 ---
 
