@@ -16,9 +16,9 @@
 	+ [2.2.2. Router Roles trong OSPF Hierarchical Topology](#routerroles)
 - [2.3. Network Types](#networktypes)
 	+ [2.3.1. DR\BDR Roles](#drbdrroles)
-		+[2.3.1.1. DR-BDR-DROther](#drbdrdrother)
-		+[2.3.1.2. Cách giao tiếp giữa DR-BDR-DROther](#giaotiep)
-		+[2.3.1.3. Bầu chọn DR-BDR-DROther](#bauchon)
+		+ [2.3.1.1. DR-BDR-DROther](#drbdrdrother)
+		+ [2.3.1.2. Cách giao tiếp giữa DR-BDR-DROther](#giaotiep)
+		+ [2.3.1.3. Bầu chọn DR-BDR-DROther](#bauchon)
 	+ [2.3.1. Point-to-Point Network](#pointtopoint)
 	+ [2.3.2. Multi-access Broadcast Network](#multiaccess)
 	+ [2.3.3. Non-broadcast Multi-access Network](#nbma)
@@ -200,7 +200,7 @@
 * Trong OSPF, mỗi Router cần phải có một **Router ID**. Router ID được dùng để cung cấp một định danh duy nhất trong môi trường OSPF.
 * Router ID có dạng là một **IPv4 Address** A.B.C.D, 32 bit, nhưng không phải là IP.
 * Router ID được chọn theo thứ tự như sau: 
-	- 1. Cấu hình bằng lệnh.
+	- Cấu hình bằng lệnh.
 	```
 	Router(config)#router ospf [process-id]
 	Router(config-router)#router-id [A.B.C.D]
@@ -208,9 +208,9 @@
 	
 	- Nếu không cấu hình bằng lệnh:
 	
-		+ 2. IP của Loopback Interface có địa chỉ cao nhất sẽ được chọn là Router ID của Router.
+		+ IP của Loopback Interface có địa chỉ cao nhất sẽ được chọn là Router ID của Router.
 		
-		+ 3. Nếu không có Loopback Interface nào được cấu hình, thì IP của Interface đang **Active** có địa chỉ cao nhất sẽ là Router ID của Router.
+		+ Nếu không có Loopback Interface nào được cấu hình, thì IP của Interface đang **Active** có địa chỉ cao nhất sẽ là Router ID của Router.
 
 * Sau khi cấu hình OSPF, Router ID có thể chưa được áp dụng với thứ tự trên. Vì vậy sau khi cấu hình OSPF xong, sử dụng lệnh sau để reset các OSPF Process và Router ID có thể được lựa chọn đúng.
 ```
