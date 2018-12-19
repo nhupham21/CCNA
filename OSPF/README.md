@@ -138,7 +138,7 @@
 ###### 2.3.1.1. DR-BDR-DROther
 * Giả sử, khi trao đổi LSA, một Router phải nói chuyện với tất cả các Router còn lại. Như vậy tất cả các kết nối là khá lớn. Có thể sẽ gây ảnh hưởng đến traffic của hệ thống.
 ![multiaccess_2](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/multiaccess_2.png)
-	
+
 * Do đó, OSPF đã định nghĩa ra **Designated Router**. Designated Router (DR) sẽ là điểm trung tâm cho việc trao đổi thông tin định tuyến giữa các Router trong miền Broadcast Multi-access Network.
 	- DR thiết lập neighbor với các Router còn lại.
 	- DR thu thập và gửi đi các thông tin LSA cho các Router.
@@ -153,8 +153,8 @@
 
 <a name="giaotiep"></a>
 ###### 2.3.1.2. Cách giao tiếp giữa DR - BDR - DROther.
-	- Các OSPF Router gửi các Hello Packet đến địa chỉ Multcast **224.0.0.5**.
-	- Khi có thay đổi, các DROther gửi Update Packet đến địa chỉ Multcast **224.0.0.6**, trong DR và BDR lại gửi Update đến **224.0.0.5**.
+* Các OSPF Router gửi các Hello Packet đến địa chỉ Multcast **224.0.0.5**.
+* Khi có thay đổi, các DROther gửi Update Packet đến địa chỉ Multcast **224.0.0.6**, trong DR và BDR lại gửi Update đến **224.0.0.5**.
 	
 <a name="bauchon"></a>
 ###### 2.3.1.3. Bầu chọn DR - BDR
@@ -164,7 +164,7 @@
 		+ Priority được cấu hình trên Interface tham gia vào OSPF trong Segment.
 		```
 		Router(config)#interface [interface-name]
-		Router(config-if)#ip ospf priority [1-255]
+		Router(config-if)#ip ospf priority [0-255]
 		```
 		+ Priority mặc định là **1** trên tất cả các Router.
 		+ Router có Priority cao nhất sẽ giữ vai trò làm DR.
@@ -172,7 +172,10 @@
 		+ Các Router còn lại có Priority thấp hơn sẽ là DROther. Các Router có Priority = 0 không tham gia bầu chọn, tức cũng trở thành DROther.
 	
 	- Xét **Router ID**: nếu Priority chưa được cấu hình thì xét đến Router ID.
-	
+		+ Router có Router ID cao nhất sẽ là DR.
+		+ Router có Router ID cao thứ hai sẽ là BDR.
+		+ Các Router còn lại sẽ là DROther.
+		
 <a name="pointtopoint"></a>	
 ##### 2.3.1. Point-to-Point Network
 * Là một kết nối của 2 Router.
@@ -184,28 +187,6 @@
 <a name="multiaccess"></a>
 ##### 2.3.2. Broadcast Multi-access Network
 * Môi trường Ethernet.
-* Giả sử, khi trao đổi LSA, một Router phải nói chuyện với tất cả các Router còn lại. Như vậy tất cả các kết nối là khá lớn. Có thể sẽ gây ảnh hưởng đến traffic của hệ thống.
-![multiaccess_2](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/multiaccess_2.png)
-	
-* Do đó, OSPF đã định nghĩa ra **Designated Router**. Designated Router (DR) sẽ là điểm trung tâm cho việc trao đổi thông tin định tuyến giữa các Router trong miền Broadcast Multi-access Network.
-	- DR thiết lập neighbor với các Router còn lại.
-	- DR thu thập và gửi đi các thông tin LSA cho các Router.
-![multiaccess_3](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/multiaccess_3.png)
-
-* **Backup Designated Router** (BDR) là Router dự phòng cho DR. Nếu trường hợp DR không hoạt động thì BDR sẽ chiếm quyền và trở thành DR.
-	- BDR cũng thiết lập neighbor với các Router còn lại.
-	- BDR không thu thập và gửi đi các thông tin LSA cho các Router, ngoại trừ BDR.
-	- BDR có một bộ timer để theo dõi DR. Nếu bộ timer chạy hết mà DR không trả lời cho BDR thì BDR sẽ xem như DR bị down và tiến hành chiếm quyền trở thành DR.
-
-* **DROther** là các Router còn lại, không phải là DR cũng không phải là BDR.
-* Cách giao tiếp giữa DR - BDR - DROther.
-	- Các OSPF Router gửi các Hello Packet đến địa chỉ Multcast **224.0.0.5**.
-	- Khi có thay đổi, các DROther gửi Update Packet đến địa chỉ Multcast **224.0.0.6**, trong DR và BDR lại gửi Update đến **224.0.0.5**.
-
-* Bầu chọn DR - BDR.
-	- Việc bầu chọn DR - BDR diễn ra trong 1 segment mạng.
-	- Việc bầu chọn như sau:
-		+ Xét **Priority**: Router có Priority cao nhất s
 		
 <a name="nbma"></a>
 ##### 2.3.3. Non-Broadcast Multi-access Network
