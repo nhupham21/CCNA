@@ -15,7 +15,7 @@
 	+ [2.2.1. Hierarchical Topology](#hierarchicaltopology)
 	+ [2.2.2. Router Roles trong OSPF Hierarchical Topology](#routerroles)
 - [2.3. Network Types](#networktypes)
-	+ [2.3.1. DR\BDR Roles](#drbdrroles)
+	+ [2.3.1. DR-BDR Roles](#drbdrroles)
 		+ [2.3.1.1. DR-BDR-DROther](#drbdrdrother)
 		+ [2.3.1.2. Cách giao tiếp giữa DR-BDR-DROther](#giaotiep)
 		+ [2.3.1.3. Bầu chọn DR-BDR-DROther](#bauchon)
@@ -25,8 +25,8 @@
 - [2.4. Nguyên lý hoạt động của OSPF](#nguyenlyhoatdong)
 	+ [2.4.1. Chọn Router ID](#routerid)
 	+ [2.4.2. Thiết lập Adjacency](#thietlapddjacency)
-	+ [2.4.3. ](#tinhtoanduongdi)
-	+ [2.4.4. Xây dựng và duy trì bảng định tuyến](#routingtable)
+	+ [2.4.3. Trao đổi LSA](#traodoilsa)
+	+ [2.4.4. Tìm đường đi](#timduongdi)
 - [2.5. Cách tính Metric trong OSPF](#metric)
 - [2.6. Cấu hình OSPF](#cauhinh)
 	+ [2.6.1. Wildcard Mask](#wildcardmask)
@@ -132,33 +132,42 @@
 	- Non-Broadcast Multi-access Network
 	
 <a name="drbdrroles"></a>	
-##### 2.3.1. DR\BDR Roles
+##### 2.3.1. DR-BDR Roles
 
 <a name="drbdrdrother"></a>
-###### 2.3.1.1. DR-BDR-DROther
+###### 2.3.1.1. DR - BDR - DROther
 * Giả sử, khi trao đổi LSA, một Router phải nói chuyện với tất cả các Router còn lại. Như vậy tất cả các kết nối là khá lớn. Có thể sẽ gây ảnh hưởng đến traffic của hệ thống.
-![multiaccess_2](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/multiaccess_2.png)
 
-* Do đó, OSPF đã định nghĩa ra **Designated Router**. Designated Router (DR) sẽ là điểm trung tâm cho việc trao đổi thông tin định tuyến giữa các Router trong miền Broadcast Multi-access Network.
+![drbdrdrother_1](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/drbdrdrother_1.png)
+
+* Do đó, OSPF đã định nghĩa ra **Designated Router**. Designated Router (DR) sẽ là điểm trung tâm cho việc trao đổi thông tin định tuyến giữa các Router.
 	- DR thiết lập neighbor với các Router còn lại.
 	- DR thu thập và gửi đi các thông tin LSA cho các Router.
-![multiaccess_3](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/multiaccess_3.png)
+	![dr](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/dr.png)
 
 * **Backup Designated Router** (BDR) là Router dự phòng cho DR. Nếu trường hợp DR không hoạt động thì BDR sẽ chiếm quyền và trở thành DR.
 	- BDR cũng thiết lập neighbor với các Router còn lại.
 	- BDR không thu thập và gửi đi các thông tin LSA cho các Router, ngoại trừ BDR.
 	- BDR có một bộ timer để theo dõi DR. Nếu bộ timer chạy hết mà DR không trả lời cho BDR thì BDR sẽ xem như DR bị down và tiến hành chiếm quyền trở thành DR.
-
+	
 * **DROther** là các Router còn lại, không phải là DR cũng không phải là BDR.
+![drbdrdrother_2](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/drbdrdrother_2.png)
+
+* Vai trò DR, BDR hay DROther chỉ tồn tại trong 1 Segment mạng. Do vậy 1 Router có thể là DR trong Segment này, nhưng lại đóng vai trò DROther trong Segment khác.
+![segment](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/segment.png)
+
+* Các DR và BDR có tính chất **Non-preempt**.
 
 <a name="giaotiep"></a>
 ###### 2.3.1.2. Cách giao tiếp giữa DR - BDR - DROther.
 * Các OSPF Router gửi các Hello Packet đến địa chỉ Multcast **224.0.0.5**.
 * Khi có thay đổi, các DROther gửi Update Packet đến địa chỉ Multcast **224.0.0.6**, trong DR và BDR lại gửi Update đến **224.0.0.5**.
+![giaotiep](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/giaotiep.png)
 	
 <a name="bauchon"></a>
-###### 2.3.1.3. Bầu chọn DR - BDR
+###### 2.3.1.3. Bầu chọn DR - BDR - DROther
 * Việc bầu chọn DR - BDR diễn ra trong 1 segment mạng.
+* Khi khởi động một tiến trình OSPF, Router sẽ lắng nghe các Hello Packet từ các Router khác. Nếu hết **Dead Interval Timer* mà không nhận được Hello Packet nào, nó sẽ tự nâng mình là DR.
 * Việc bầu chọn như sau:
 	- Xét **Priority**:
 		+ Priority được cấu hình trên Interface tham gia vào OSPF trong Segment.
@@ -169,28 +178,41 @@
 		+ Priority mặc định là **1** trên tất cả các Router.
 		+ Router có Priority cao nhất sẽ giữ vai trò làm DR.
 		+ Router có Priority cao thứ hai sẽ giữ vai trò làm BDR.
-		+ Các Router còn lại có Priority thấp hơn sẽ là DROther. Các Router có Priority = 0 không tham gia bầu chọn, tức cũng trở thành DROther.
+		+ Các Router còn lại có Priority thấp hơn sẽ là DROther. Các Router có Priority = 0, không tham gia bầu chọn, tức là cũng trở thành DROther.
 	
-	- Xét **Router ID**: nếu Priority chưa được cấu hình thì xét đến Router ID.
+	- Xét **Router ID**: nếu Priority chưa được cấu hình thì xét đến Router ID. 
+		+ Lưu ý: **Khi dùng Router ID để bầu chọn DR,BDR, các Router ID được chọn từ Loopback sẽ không có hiệu lực**.
 		+ Router có Router ID cao nhất sẽ là DR.
 		+ Router có Router ID cao thứ hai sẽ là BDR.
 		+ Các Router còn lại sẽ là DROther.
 		
+* Các DR và BDR có tính chất **Non-preempt**. Nghĩa là các Router tham gia vào OSPF sau, mặc dù có Priority hay Router ID cao hơn vẫn không được làm DR.
+		
 <a name="pointtopoint"></a>	
-##### 2.3.1. Point-to-Point Network
+##### 2.3.2. Point-to-Point Network
 * Là một kết nối của 2 Router.
 * Sử dụng serial link (HDLC, PPP).
-* Không có sự bầu chọn Designated Router (DR) và Backup Designated Router (BDR).
+* Không có sự bầu chọn DR và BDR.
 * Các Hello Packet đều được gửi đến địa chỉ Multcast 224.0.0.5.
 ![pointtopoint_1](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/pointtopoint_1.png)
 
 <a name="multiaccess"></a>
 ##### 2.3.2. Broadcast Multi-access Network
 * Môi trường Ethernet.
-		
+* Có sự bầu chọn DR,BDR giữa các Router.
+* Các chỉ thiết lập Adjacency với DR và BDR.
+* Các OSPF Router gửi các Hello Packet đến địa chỉ Multcast **224.0.0.5**.
+* Khi có thay đổi, các DROther gửi Update Packet đến địa chỉ Multcast **224.0.0.6**, trong khi DR và BDR lại gửi Update đến **224.0.0.5**.
+![multiaccess_1](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/multiaccess_1.png)
+
 <a name="nbma"></a>
 ##### 2.3.3. Non-Broadcast Multi-access Network
+* Mô hình mạng kết nối nhiều hơn 2 Router nhưng không có khả năng broadcast.
+* Frame Relay, ATM, X.25,...
 
+![nbma](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/nbma.png)
+
+* Có 5 mode network OSPF trong NBMA.
 
 <a name="nguyenlyhoatdong"></a>
 #### 2.4. Nguyên lý hoạt động của OSPF
@@ -216,6 +238,28 @@
 ```
 Router#clear ip ospf process
 ```
+
+<a name="thietlapddjacency"></a>
+##### 2.4.2. Thiết lập Adjacency
+* Các Router sẽ gửi các **Hello Packet** đến địa chỉ Multcast 224.0.0.5 liên tục theo chu kỳ 10s/lần.
+![hellopacket_1](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/hellopacket_1.png)
+
+* Các Router sẽ kiểm tra các thông số và một số option trong các Hello Packet. Nếu các thông số match với nhau, các Router đó sẽ thiết lập quan hệ Adjacency.
+	- Router ID
+	- Hello and Dead Interval Timer
+	- Area ID
+	- Router Priority
+	- DR IP Address
+	- BDR IP Address
+	- Authentication Password
+	- Stub area flag	
+![hellopacket_2](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/hellopacket_2.png)
+
+* Nếu chạy hết Dead Interval Timer mà không nhận được Hello Packet nào cả, thì Router thì tự nâng quyền thành DR.
+![hellopacket_3](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/hellopacket_3.png)
+
+<a name="traodoilsa"></a>
+##### 2.4.3. Trao đổi LSA
 
 ---
 
