@@ -303,12 +303,14 @@ Cost = (100 Mbps) / (Bandwidth in Mbps)
 ```
 
 * Như vậy, mỗi loại Link (hay Interface) khác nhau sẽ có một giá trị Cost khác nhau.
+
 |Loại Interface|Bandwidth|Cost|
 |:----|----:|----:|
-|Serial|1,544|64|
+|Serial|1.544|64|
 |Ethernet|10|10|
 |Fast Ethernet|100|1|
 |Giga Ethernet|1000|1|
+
 
 ---
 
