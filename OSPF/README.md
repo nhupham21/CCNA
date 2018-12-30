@@ -27,7 +27,7 @@
 	+ [2.4.2. Thiết lập Adjacency](#thietlapddjacency)
 	+ [2.4.3. Trao đổi LSA](#traodoilsa)
 	+ [2.4.4. Tìm đường đi](#timduongdi)
-- [2.5. Cách tính Metric trong OSPF](#metric)
+- [2.5. Cách tính Cost trong OSPF](#Cost)
 - [2.6. Cấu hình OSPF](#cauhinh)
 	+ [2.6.1. Wildcard Mask](#wildcardmask)
 	+ [2.6.2. Cấu hình OSPF](#cauhinhospf)
@@ -154,15 +154,15 @@
 ![drbdrdrother_2](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/drbdrdrother_2.png)
 
 * Vai trò DR, BDR hay DROther chỉ tồn tại trong 1 Segment mạng. Do vậy 1 Router có thể là DR trong Segment này, nhưng lại đóng vai trò DROther trong Segment khác.
+
 ![segment](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/segment.png)
 
 * Các DR và BDR có tính chất **Non-preempt**.
 
 <a name="giaotiep"></a>
 ###### 2.3.1.2. Cách giao tiếp giữa DR - BDR - DROther.
-* Các OSPF Router gửi các Hello Packet đến địa chỉ Multcast **224.0.0.5**.
+* Các OSPF Router gửi các Hello Packet đến địa chỉ Multicast **224.0.0.5**.
 * Khi có thay đổi, các DROther gửi Update Packet đến địa chỉ Multcast **224.0.0.6**, trong DR và BDR lại gửi Update đến **224.0.0.5**.
-![giaotiep](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/giaotiep.png)
 	
 <a name="bauchon"></a>
 ###### 2.3.1.3. Bầu chọn DR - BDR - DROther
@@ -197,7 +197,7 @@
 ![pointtopoint_1](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/pointtopoint_1.png)
 
 <a name="multiaccess"></a>
-##### 2.3.2. Broadcast Multi-access Network
+##### 2.3.3. Broadcast Multi-access Network
 * Môi trường Ethernet.
 * Có sự bầu chọn DR,BDR giữa các Router.
 * Các chỉ thiết lập Adjacency với DR và BDR.
@@ -206,7 +206,7 @@
 ![multiaccess_1](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/multiaccess_1.png)
 
 <a name="nbma"></a>
-##### 2.3.3. Non-Broadcast Multi-access Network
+##### 2.3.4. Non-Broadcast Multi-access Network
 * Mô hình mạng kết nối nhiều hơn 2 Router nhưng không có khả năng broadcast.
 * Frame Relay, ATM, X.25,...
 
@@ -252,14 +252,63 @@ Router#clear ip ospf process
 	- DR IP Address
 	- BDR IP Address
 	- Authentication Password
-	- Stub area flag	
-![hellopacket_2](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/hellopacket_2.png)
+	- Stub area flag
+	![hellopacket_2](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/hellopacket_2.png)
 
-* Nếu chạy hết Dead Interval Timer mà không nhận được Hello Packet nào cả, thì Router thì tự nâng quyền thành DR.
+* Nếu chạy hết Dead Interval Timer (Mặc định, Dead Interval Timer = 4 * Hello Interval Timer) mà không nhận được Hello Packet nào cả, thì Router thì tự nâng quyền thành DR.
 ![hellopacket_3](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/hellopacket_3.png)
 
+* Khi lên Adjacency với nhau, các Router sẽ ở trạng thái **2-WAY**.
+* Khi đó, nếu các Router trong môi trường Broadcast Multi-access Network, việc bầu chọn DR và BDR sẽ diễn ra. Các DROther sẽ thiết lập quan hệ Adjacency trực với DR và BDR.
+![adjacency_1](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/adjacency_1.png)
+* Nếu trong Point-to-Point Network thì không có sự bầu chọn DR và DBR.
+![adjacency_2](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/adjacency_2.png)
+		
 <a name="traodoilsa"></a>
-##### 2.4.3. Trao đổi LSA
+##### 2.4.3. Trao đổi LSA 
+* Sau khi thiết lập quan hệ Adjacency, các Router trao đổi các bảng tin LSA để trao đổi và duy trì các thông tin định tuyến. Mỗi Router trong OSPF sử dụng LSA để chia sẻ và học thông tin định tuyến.
+* **Link** được định nghĩa trong OSPF là một interface chạy giao tuyến định tuyến OSPF.
+* **State** có nghĩa là thông tin ứng với link. Một link có một số thông tin như địa chỉ IP, trạng thái up/down, subnet mask, loại interface, loại network, bandwidth và delay. 
+* Ta có thể hiểu, **Link-state** có thể nghĩa là trạng thái của một interface tham gia vào OSPF.
+* **Link-state Advertisement** (LSA) là một data packet chứa thông tin link-state và thông tin định tuyến.
+* Một Router chạy OSPF duy trì một Link-state Database. **Link-state Database** (LSDB) là tập hợp các LSA của một Router. Router trao đổi LSA để đồng bộ LSDB.
+* Quá trình trao đổi LSA diễn ra như sau:
+	- Router sẽ gửi ra các gói **DB Description** để giới thiệu các LSA của Router đó cho các Neighbor của mình.
+	![dbd](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/dbd.png)
+	
+	- Các Router nhận được gói **DB Description** sẽ so sánh với LSDB của mình. Những LSA nào không có trong LSDB của mình sẽ được Router yêu cầu bằng cách gửi ra gói tin **LS Request**.
+	![lsrequest](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/lsrequest.png)
+	
+	- Sau khi nhận lại **LS Request**, Router sẽ gửi LSA được yêu cầu trong gói **LS Update**.
+	![lsupdate](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/lsupdate.png)
+	
+	- Cuối cùng, Router nhận được các LSA từ **LS Update**, cập nhật LSDB của mình và gửi lại thông báo đã nhận được **LS Acknowledge**.
+	![lsack](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/lsack.png)
+	
+* Quá trình trao đổi LSA như vậy diễn ra trong một Area và các Router sẽ có được một bức tranh Mạng của cả hệ thống.
+
+<a name="timduongdi"></a>
+###### 2.4.4. Tìm đường đi
+* Router sẽ tính toán đường đi tốt nhất đến Mạng đích bằng cách áp dụng thuật toán Dijkstra vào LSDB đã xây dựng và duy trì thông qua việc trao đổi LSA.
+![bestroute](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/bestroute.png)
+
+* Đường đi tốt nhất được chọn sẽ là đường đi có **tổng Cost các Link tới Mạng đích là thất nhất**.
+
+* Sau đó, đường đi tốt nhất sẽ được đưa vào bảng định tuyến.
+<a name="cost"></a>
+##### 2.5. Cách tính Cost trong OSPF
+* Cost của mỗi Link sẽ được tính bằng công thức.
+```
+Cost = (100 Mbps) / (Bandwidth in Mbps)
+```
+
+* Như vậy, mỗi loại Link (hay Interface) khác nhau sẽ có một giá trị Cost khác nhau.
+|Loại Interface|Bandwidth|Cost|
+|:----|----:|----:|
+|Serial|1,544|64|
+|Ethernet|10|10|
+|Fast Ethernet|100|1|
+|Giga Ethernet|1000|1|
 
 ---
 
@@ -275,7 +324,7 @@ Router#clear ip ospf process
 
 [5] OSPF Desginated and Backup Designated Router. http://nguyenvcuong.blogspot.com/2012/05/ospf-desginated-and-backup-designated.html
 
-
+[6] OSPF Neighbor States Explained with Example. https://www.computernetworkingnotes.com/ccna-study-guide/ospf-neighbor-states-explained-with-example.html
 ---
 
 ### Hết
