@@ -4,7 +4,7 @@
 > 
 > Thực hiện: **Phạm Hoàng Nhu**
 > 
-> Cập nhật lần cuối: **12/12/2018**
+> Cập nhật lần cuối: **01/01/2019**
 
 ### Mục lục
 [1. Link-state Protocol](#linkstateprotocol)
@@ -201,8 +201,8 @@
 * Môi trường Ethernet.
 * Có sự bầu chọn DR,BDR giữa các Router.
 * Các chỉ thiết lập Adjacency với DR và BDR.
-* Các OSPF Router gửi các Hello Packet đến địa chỉ Multcast **224.0.0.5**.
-* Khi có thay đổi, các DROther gửi Update Packet đến địa chỉ Multcast **224.0.0.6**, trong khi DR và BDR lại gửi Update đến **224.0.0.5**.
+* Các OSPF Router gửi các Hello Packet đến địa chỉ Multcast 224.0.0.5.
+* Khi có thay đổi, các DROther gửi Update Packet đến địa chỉ Multcast 224.0.0.6, trong khi DR và BDR lại gửi Update đến 224.0.0.5.
 ![multiaccess_1](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/multiaccess_1.png)
 
 <a name="nbma"></a>
@@ -323,8 +323,7 @@ Cost = (100 Mbps) / (Bandwidth in Mbps)
 ```
 Router(config)#router ospf [process-id]
 ```
-	
-	- Lưu ý: Process ID chỉ có giá trị local. Do đó, Mỗi Router không cần phải giống nhau về Process ID.
+* Lưu ý: Process ID chỉ có giá trị local. Do đó, Mỗi Router không cần phải giống nhau về Process ID.
 
 * Cấu hình Router ID.
 ```
@@ -363,7 +362,7 @@ Router(config-router)#network [reference-ip] [wildcard-mask] area [area-id]
 
 <a name="passiveinterface"></a>
 #### 2.7. Passive-interface trong OSPF
-* Trong OSPF, Router sẽ không gửi các bản tin OSPF (Hello, LSA, LSR,...) ra các **Passive-interface*. Do vậy, Router sẽ không thiết lập được Adjacency và không thể trao đổi được thông tin định tuyến với nhau.
+* Trong OSPF, Router sẽ không gửi các bản tin OSPF (Hello, LSA, LSR,...) ra các **Passive-interface**. Do vậy, Router sẽ không thiết lập được Adjacency và không thể trao đổi được thông tin định tuyến với nhau.
 ![passive_interface_1](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/passive_interface_1.png)
 
 * Cấu hình Passive interface.
@@ -441,6 +440,8 @@ Router#show ip ospf interface [interface-name]
 [9] Network Types trong OSPF. https://tailamblog.wordpress.com/2017/08/11/network-types-trong-ospf/
 
 [10] OSPF Authentication. https://study-ccna.com/ospf-authentication/
+
+[11] http://www.vnpro.org/forum/forum/ccna%C2%AE/icnd-2-routing-access-list/31418-ph%C3%A2n-bi%E1%BB%87t-passive-interface-gi%E1%BB%AFa-ospf-rip
 ---
 
 ### Hết
