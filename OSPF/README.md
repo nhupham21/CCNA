@@ -253,9 +253,10 @@ Router#clear ip ospf process
 	- BDR IP Address
 	- Authentication Password
 	- Stub area flag
-	![hellopacket_2](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/hellopacket_2.png)
+	
+![hellopacket_2](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/hellopacket_2.png)
 
-* Nếu chạy hết Dead Interval Timer (Mặc định, Dead Interval Timer = 4 * Hello Interval Timer) mà không nhận được Hello Packet nào cả, thì Router thì tự nâng quyền thành DR.
+* Nếu chạy hết Dead Interval Timer (Mặc định, **Dead Interval Timer = 4 * Hello Interval Timer**) mà không nhận được Hello Packet nào cả, thì Router thì tự nâng quyền thành DR.
 ![hellopacket_3](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/hellopacket_3.png)
 
 * Khi lên Adjacency với nhau, các Router sẽ ở trạng thái **2-WAY**.
@@ -274,16 +275,9 @@ Router#clear ip ospf process
 * Một Router chạy OSPF duy trì một Link-state Database. **Link-state Database** (LSDB) là tập hợp các LSA của một Router. Router trao đổi LSA để đồng bộ LSDB.
 * Quá trình trao đổi LSA diễn ra như sau:
 	- Router sẽ gửi ra các gói **DB Description** để giới thiệu các LSA của Router đó cho các Neighbor của mình.
-	![dbd](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/dbd.png)
-	
 	- Các Router nhận được gói **DB Description** sẽ so sánh với LSDB của mình. Những LSA nào không có trong LSDB của mình sẽ được Router yêu cầu bằng cách gửi ra gói tin **LS Request**.
-	![lsrequest](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/lsrequest.png)
-	
 	- Sau khi nhận lại **LS Request**, Router sẽ gửi LSA được yêu cầu trong gói **LS Update**.
-	![lsupdate](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/lsupdate.png)
-	
 	- Cuối cùng, Router nhận được các LSA từ **LS Update**, cập nhật LSDB của mình và gửi lại thông báo đã nhận được **LS Acknowledge**.
-	![lsack](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/lsack.png)
 	
 * Quá trình trao đổi LSA như vậy diễn ra trong một Area và các Router sẽ có được một bức tranh Mạng của cả hệ thống.
 
@@ -295,6 +289,7 @@ Router#clear ip ospf process
 * Đường đi tốt nhất được chọn sẽ là đường đi có **tổng Cost các Link tới Mạng đích là thất nhất**.
 
 * Sau đó, đường đi tốt nhất sẽ được đưa vào bảng định tuyến.
+
 <a name="cost"></a>
 ##### 2.5. Cách tính Cost trong OSPF
 * Cost của mỗi Link sẽ được tính bằng công thức.
@@ -311,6 +306,117 @@ Cost = (100 Mbps) / (Bandwidth in Mbps)
 |Fast Ethernet|100|1|
 |Giga Ethernet|1000|1|
 
+* Tổng Cost các Link tới Mạng đích sẽ được **tính từ Mạng đích trở về, đi vào Interface thì cộng Cost của Interface đó, đi ra khỏi Interface thì không cộng**.
+* Và đường đi tốt nhất được chọn sẽ là đường đi có **tổng Cost các Link tới Mạng đích là thất nhất**.
+* Ví dụ:
+![tinhcost](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/tinhcost.png)
+
+<a name="cauhinh"></a>
+#### 2.6. Cấu hình OSPF
+
+<a name="wildcardmask"></a>
+##### 2.6.1 Wildcard Mask
+
+<a name="cauhinhospf"></a>
+##### 2.6.2 Cấu hình OSPF
+* Bật OSPF.
+```
+Router(config)#router ospf [process-id]
+```
+	
+	- Lưu ý: Process ID chỉ có giá trị local. Do đó, Mỗi Router không cần phải giống nhau về Process ID.
+
+* Cấu hình Router ID.
+```
+Router(config-router)#router-id [A.B.C.D]
+```
+
+* Cấu hình dải mạng tham gia vào OSPF.
+```
+Router(config-router)#network [reference-ip] [wildcard-mask] area [area-id]
+```
+
+* Kiểm tra.
+	- Kiểm tra các thông số của OSPF.
+	```
+	Router#show ip ospf
+	```
+	
+	```
+	Router#show ip protocols
+	```
+	
+	- Kiểm tra các Entry trên bảng định tuyến.
+	```
+	Router#show ip route ospf
+	```
+	
+	- Kiểm tra thông số của các Adjacency.
+	```
+	Router#show ip ospf neighbor
+	```
+	
+	- Kiểm tra các Event của OSPF.
+	```
+	Router#show ip ospf events
+	```
+
+<a name="passiveinterface"></a>
+#### 2.7. Passive-interface trong OSPF
+* Trong OSPF, Router sẽ không gửi các bản tin OSPF (Hello, LSA, LSR,...) ra các **Passive-interface*. Do vậy, Router sẽ không thiết lập được Adjacency và không thể trao đổi được thông tin định tuyến với nhau.
+![passive_interface_1](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/passive_interface_1.png)
+
+* Cấu hình Passive interface.
+```
+Router(config)#router ospf [process-id]
+
+Router(config-router)#passive-interface [interface-name]
+```
+
+<a name="authentication"></a>
+#### 2.8. Authentication trong OSPF
+* OSPF có thể được cấu hình để có thể xác thực mỗi OSPF message.
+* Trong quá trình thiết lập Adjacency, các Router phải pass qua bước xác thực thì mới trở thành Adjacency.
+* Có 2 loại xác thực:
+	- Clear text Authentication.
+	- MD5 Authentication.
+* Cấu hình Clear text Authentication
+```
+Router(config)#interface [interface-name]
+
+Router(config-if)#ip ospf authentication 
+
+Router(config-if)#ip ospf authentication-key [password]
+```
+
+* Cấu hình MD5 Authentication
+```
+Router(config)#interface [interface-name]
+
+Router(config-if)#ip ospf authentication message-digest
+
+Router(config-if)#ip ospf message-digest-key [key-ID] md5 [encryption-type] [password]
+```
+
+* Có thể chọn loại Authentication trên cả Area.
+```
+Router(config)#router ospf [process-id]
+
+Router(config-router)#area [area-id] authentication
+```
+
+hoặc
+
+```
+Router(config)#router ospf [process-id]
+
+Router(config-router)#area [area-id] authentication message-digest
+```
+
+* Kiểm tra.
+```
+Router#show ip ospf interface [interface-name]
+```
 
 ---
 
@@ -326,7 +432,15 @@ Cost = (100 Mbps) / (Bandwidth in Mbps)
 
 [5] OSPF Desginated and Backup Designated Router. http://nguyenvcuong.blogspot.com/2012/05/ospf-desginated-and-backup-designated.html
 
-[6] OSPF Neighbor States Explained with Example. https://www.computernetworkingnotes.com/ccna-study-guide/ospf-neighbor-states-explained-with-example.html
+[6] OSPF - The DR and BDR Roles. https://www.fir3net.com/Networking/Protocols/ospf-the-dr-and-bdr-roles.html
+
+[7] DR BDR Communication. https://community.cisco.com/t5/routing/dr-bdr-communication/td-p/1142718
+
+[8] OSPF Neighbor States Explained with Example. https://www.computernetworkingnotes.com/ccna-study-guide/ospf-neighbor-states-explained-with-example.html
+
+[9] Network Types trong OSPF. https://tailamblog.wordpress.com/2017/08/11/network-types-trong-ospf/
+
+[10] OSPF Authentication. https://study-ccna.com/ospf-authentication/
 ---
 
 ### Hết

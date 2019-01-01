@@ -278,7 +278,10 @@ Router(config-router)#timers basic [Update] [Invalid] [Holddown] [Flush]
 * Để khắc phục hiện tượng này, người ta sử dụng **Passive-interface** đối với các interface kết nối với end-user. Passive-interface có tác dụng ngăn RIP không gửi Update ra các interface được cấu hình passive-interface. 
 ![passive_interface_2](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/passive_interface_2.png)
 
-* Cấu hình passiveinterface.
+* Các Passive-interface không gửi gói tin Update ra nhưng vẫn lắng nghe và nhận các gói tin Update từ Neighbor.
+![passive_interface_3](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/passive_interface_3.png)
+
+* Cấu hình Passive interface.
 ```
 Router(config)#router rip
 
