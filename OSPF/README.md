@@ -4,7 +4,7 @@
 > 
 > Thực hiện: **Phạm Hoàng Nhu**
 > 
-> Cập nhật lần cuối: **01/01/2019**
+> Cập nhật lần cuối: **02/01/2019**
 
 ### Mục lục
 [1. Link-state Protocol](#linkstateprotocol)
@@ -216,7 +216,12 @@
 
 <a name="nguyenlyhoatdong"></a>
 #### 2.4. Nguyên lý hoạt động của OSPF
-
+* OSPF hoạt động qua 4 bước chính:
+	- Chọn Router ID
+	- Thiết lập Adjacency
+	- Trao đổi LSA
+	- Tìm đường đi
+	
 <a name="routerid"></a>	
 ##### 2.4.1. Chọn Router ID
 * Trong OSPF, mỗi Router cần phải có một **Router ID**. Router ID được dùng để cung cấp một định danh duy nhất trong môi trường OSPF.
@@ -241,7 +246,7 @@ Router#clear ip ospf process
 
 <a name="thietlapddjacency"></a>
 ##### 2.4.2. Thiết lập Adjacency
-* Các Router sẽ gửi các **Hello Packet** đến địa chỉ Multcast 224.0.0.5 liên tục theo chu kỳ 10s/lần.
+* Các Router sẽ gửi các **Hello Packet** đến địa chỉ Multcast 224.0.0.5 liên tục theo chu kỳ mặc định là 10s/lần.
 ![hellopacket_1](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/hellopacket_1.png)
 
 * Các Router sẽ kiểm tra các thông số và một số option trong các Hello Packet. Nếu các thông số match với nhau, các Router đó sẽ thiết lập quan hệ Adjacency.
@@ -292,6 +297,7 @@ Router#clear ip ospf process
 
 <a name="cost"></a>
 ##### 2.5. Cách tính Cost trong OSPF
+
 * Cost của mỗi Link sẽ được tính bằng công thức.
 ```
 Cost = (100 Mbps) / (Bandwidth in Mbps)
@@ -310,6 +316,32 @@ Cost = (100 Mbps) / (Bandwidth in Mbps)
 * Và đường đi tốt nhất được chọn sẽ là đường đi có **tổng Cost các Link tới Mạng đích là thất nhất**.
 * Ví dụ:
 ![tinhcost](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/tinhcost.png)
+
+* Có thể điều chỉnh giá trị cost của một interface bằng một số cách:
+	- Thay đổi Bandwidth trên interface đó.
+	```
+	Router(config)#interface [interface-name]
+	Router(config-if)#bandwidth [bandwidth-in-kilobits]
+	```
+	
+	- Thay đổi giá trị Cost của OSPF trên interface đó.
+	```
+	Router(config)#interface [interface-name]
+	Router(config-if)#ip ospf cost [<1-65535>]
+	```
+* Kiểm tra giá trị Cost của một interface bằng lệnh.
+```
+Router#show ip ospf interface [interface-name]
+```	
+![showcost](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/showcost.png)
+
+* Trong OSPF, nếu 2 đường route cùng đi đến một đích, có metric bằng bằng nhau thì 2 đường đó có thể cân bằng tải với nhau (**Load-balancing**).
+* Mặc định thì Router Cisco hỗ trợ cân bằng tải 4 đường có metric bằng nhau.
+* Có thể thay đổi số đường có thể cân bằng tải (tối đa là 16 đường) bằng lệnh:
+```
+Router(config)#router ospf [process-id]
+Router(config-router)#maximum-paths [<1-16>]
+```
 
 <a name="cauhinh"></a>
 #### 2.6. Cấu hình OSPF
@@ -442,6 +474,7 @@ Router#show ip ospf interface [interface-name]
 [10] OSPF Authentication. https://study-ccna.com/ospf-authentication/
 
 [11] http://www.vnpro.org/forum/forum/ccna%C2%AE/icnd-2-routing-access-list/31418-ph%C3%A2n-bi%E1%BB%87t-passive-interface-gi%E1%BB%AFa-ospf-rip
+
 ---
 
 ### Hết
