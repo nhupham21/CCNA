@@ -14,7 +14,7 @@
 [3. Nguyên lý hoạt động của EIGRP](#nguyenlyhoatdong)
 - [3.1. Thiết lập Adjacency](#thietlapadjacency)
 - [3.2. Đưa vào bảng Topology](#duavaobangtopolpgy)
-- [3.3. Tìm đường đi tốt nhất](#timduongdi)
+- [3.3. Tìm đường đi](#timduongdi)
 	
 [4. Các tính metric trong EIGRP](#metric)
 
@@ -54,7 +54,7 @@
 <a name="rtp"></a>
 ### 2. RTP trong EIGRP
 * EIGRP gửi các message mà không sử dụng UDP hay TCP. Thay vào đó, nó sử dụng một Protocol gọi là **Reliable Transport Protocol** (RTP) của Cisco, để giao tiếp với các EIGRP Neighbor. Tránh nhầm lẫn với **Real-Time Transport Protocol** (cũng viết tắt là RTP) được dùng trong VoIP.
-* Reliability là tính năng quan trọng của Protocol, nó được thiết kế để có thể cho phép vận chuyển các gói Update nhanh chóng và theo dõi quá trình nhận dữ liệu.
+* Reliability là tính năng quan trọng của Protocol này, nó được thiết kế để có thể cho phép vận chuyển các gói Update nhanh chóng và theo dõi quá trình nhận dữ liệu.
 * Nó cung cấp cơ chế Sequencing và Acknowledgment cho các EIGRP Packet truyền giữa các EIGRP Neighbor mà không có thêm các Windowing hay Congestion Control (Điều khiển Tắc nghẽn), tức là chỉ có 1 Packet có thể gửi đi tại 1 thời điểm.
 ![rtp](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/rtp.png)
 
@@ -65,7 +65,7 @@
 	- Đưa vảo bảng Topology
 	- Tìm đường đi
 	
-<a name="thietlapadjacency">
+<a name="thietlapadjacency"></a>
 #### 3.1. Thiết lập Adjacency
 * Các Router sẽ gửi gói Hello Packet đến địa chỉ Multicast **224.0.0.10** liên tục mặc định là 5s/lần.
 * Các Router nhận được sẽ kiểm tra các thông số và một số Option trong Hello Packet. Nếu các thông số match với nhau, các Router sẽ thiết lập quan hệ Adjacency.
@@ -89,7 +89,7 @@ Router#show ip eigrp neighbors
 * Sau khi thiết lập Adjacency, các Router sẽ tính toán FD và AD của mỗi mạng mà nó có thể tới.
 ![topology_2](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/topology_2.png)
 
-* Và đưa vào bảng Topology (Topology Table).
+* Và đưa vào bảng Topology (**pology Table**).
 ![topology_3](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/topology_3.png)
 
 ---
