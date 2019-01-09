@@ -89,7 +89,7 @@ Router#show ip eigrp neighbors
 * Sau khi thiết lập Adjacency, các Router sẽ tính toán FD và AD của mỗi mạng mà nó có thể tới.
 ![topology_2](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/topology_2.png)
 
-* Và đưa vào bảng Topology (**pology Table**).
+* Và đưa vào bảng Topology ( **Topology Table** ).
 ![topology_3](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/topology_3.png)
 
 ---

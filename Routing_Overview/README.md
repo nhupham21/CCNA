@@ -52,7 +52,7 @@
 	- Route timestamp: Định ra thời điểm cuối cùng route được học.
 	- Outgoing interface: Interface đầu ra dùng để forward một gói tin đến mạng đích. 
 
-![entry_routing_table](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_connected.png)
+![entry_routing_table](https://github.com/nhuhp/CCNA/blob/master/Routing_Overview/img/entry_routing_table.jpg)
 	
 * Bảng định tuyến là một cấu trúc phân cấp, được dùng để tăng tốc quá trình tìm kiếm khi định vị route và forward packet.
 * Đối với bảng định tuyến của Cisco, có thể chia route thành một số cấp độ như sau:	
