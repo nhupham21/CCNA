@@ -348,8 +348,40 @@ Router(config-router)#maximum-paths [<1-16>]
 
 <a name="wildcardmask"></a>
 ##### 2.6.1 Wildcard Mask
-
-<a name="cauhinhospf"></a>
+* **Wildcard Mask** được dùng để định danh một dải địa chỉ mạng. Chúng thường dùng với các giao thức định tuyến (OSPF, EIGRP) và access list.
+* Cũng giống như Subnet Mask, Wildcard Mask dài 32 bit. Wildcard Mask thường đi kèm với một địa chỉ IP tham chiếu. IP tham chiếu thường sẽ là IP nằm trong dải địa chỉ mà Wildcard Mask mà thể hiện.
+* Cách xác định: Trong dải địa chỉ cần lấy:
+	- Các bit không thay đổi tương ứng **bit 0** trên Wildcard Mask.
+	- Các bit thay đổi (di động) tương ứng **bit 1** trên Wildcard Mask.
+* Ví dụ:
+	- Lấy ra dải mạng 192.168.1.8/24 - 192.168.1.11/24
+	```
+	192.168.1.8/24   =  192.168.  1. 0000 10 00
+	192.168.1.9/24   =  192.168.  1. 0000 10 01
+	192.168.1.10/24  =  192.168.  1. 0000 10 10
+	192.168.1.11/24  =  192.168.  1. 0000 10 11
+	```
+	
+	Ta thấy 2 bit cuối cùng của octet thứ 4 thì liên tục thay đổi, các bit còn lại thì vẫn giữ nguyên. Nên:
+	
+	```
+	Wildcard Mask    =    0.  0.  0. 0000 00 11   =   0.0.0.3
+	IP reference     =  192.168.1.8  
+	```
+			
+* Wildcard Mask có thể chọn ra:
+	- Địa chỉ của một host hoặc một địa chỉ IP duy nhất.
+		+ 192.168.1.212	0.0.0.0
+		
+	- Toàn bộ một mạng (Class A, B, C, ...)
+		+ 172.16.0.1 0.0.255.255
+		
+	- Toàn bộ Subnet.
+		+ 10.0.0.0	0.0.0.128
+		
+	- Một dải địa chỉ mạng.
+		+ 192.168.1.8 0.0.0.3
+		
 ##### 2.6.2 Cấu hình OSPF
 * Bật OSPF.
 ```
