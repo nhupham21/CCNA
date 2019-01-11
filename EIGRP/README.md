@@ -89,8 +89,6 @@ Router#show ip eigrp neighbors
 	- **Successor**: Route có Metric tốt nhất đến mạng đích. Route này sẽ được đặt vào bảng định tuyến.
 	- **Feasible Successor**: Route dự phòng trong trường Successor bị down. Router này sẽ được đặt trong bảng Topology.
 	- Điều kiện để chọn Successor: Route đến đích có FD nhỏ nhất hay FDmin.
-	![successor](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/successor.png)
-
 	- Điều kiện để Feasible Successor: 2 điều kiện phải cùng xảy ra:
 		+ Route có FD lớn hơn FDmin: FD > FDmin.
 		+ Route có AD nhỏ hơn FDmin: AD < FDmin.
@@ -99,6 +97,7 @@ Router#show ip eigrp neighbors
 ![topology_2](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/topology_2.png)
 
 * Và sẽ đưa vào bảng Topology.
+
 ![topology_3](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/topology_3.png)
 
 * Dùng lệnh để show các Successor và Feasible Successor. 
@@ -139,9 +138,10 @@ Router#show ip eigrp topology all-links
 	- K2 = K4 = K5 = 0
 
 * Metric được tính bằng công thức:
+
 ![metric_1](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/metric_1.png)
 
-* Mỗi loại Interface sẽ có các giá trị Bandwidth và Delay khác nhau.
+* Mỗi loại Interface sẽ có các giá trị mặc định Bandwidth và Delay khác nhau.
 
 |Loại Interface|Bandwidth(Kbps)|Delay(10microsecond)|
 |:----|----:|----:|
