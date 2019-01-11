@@ -83,14 +83,84 @@ Router#show ip eigrp neighbors
 #### 3.2. Đưa vào bảng Topology
 * EIGRP định nghĩa một số khái niệm để tính toán đường đi.
 	- **Feasible Distance** (FD): là Metric của Route tính từ Router đang xét đến đích.
-	- **Advertised Distance** (AD): là Metric của Route tính từ Neighbor của Router đang xét đến đích.
+	- **Advertised Distance** (AD) hoặc **Reported Distance** (RD): là Metric của Route tính từ Neighbor của Router đang xét đến đích.
 	![topology_1](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/topology_1.png)
+	
+	- **Successor**: Route có Metric tốt nhất đến mạng đích. Route này sẽ được đặt vào bảng định tuyến.
+	- **Feasible Successor**: Route dự phòng trong trường Successor bị down. Router này sẽ được đặt trong bảng Topology.
+	- Điều kiện để chọn Successor: Route đến đích có FD nhỏ nhất hay FDmin.
+	![successor](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/successor.png)
+
+	- Điều kiện để Feasible Successor: 2 điều kiện phải cùng xảy ra:
+		+ Route có FD lớn hơn FDmin: FD > FDmin.
+		+ Route có AD nhỏ hơn FDmin: AD < FDmin.
 
 * Sau khi thiết lập Adjacency, các Router sẽ tính toán FD và AD của mỗi mạng mà nó có thể tới.
 ![topology_2](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/topology_2.png)
 
-* Và đưa vào bảng Topology ( **Topology Table** ).
+* Và sẽ đưa vào bảng Topology.
 ![topology_3](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/topology_3.png)
+
+* Dùng lệnh để show các Successor và Feasible Successor. 
+```
+Router#show ip eigrp topology
+```
+
+hoặc lệnh này để show tất các Route có thể có.
+```
+Router#show ip eigrp topology all-links
+```
+
+![topology_4](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/topology_4.png)
+
+<a name="timduongdi"></a>
+#### 3.3. Tìm đường đi
+* EIGRP dùng **thuật toán DUAL**, để chọn Successor và Feasible Successor.
+* Successor sẽ được đưa vào bảng định tuyến.
+![successor](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/successor.png)
+
+* Nếu có Feasible Successor, thì sẽ được thể hiện trên bảng Topology.
+![feasible_successor](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/feasible_successor.png)
+
+* Trong trường hợp Successor bị down, Feasible Successor sẽ lên làm Successor. Nếu không có Feasible Successor, các Router sẽ tính toán lại đường đi tốt nhất.
+* EIGRP có cơ chế **Preempt**. Nghĩa là Successor down, sau đó up lại thì vẫn tiếp tục được làm Successor.
+
+<a name="metric"></a>
+### 4. Cách tính Metric trong EIGRP
+* Trong EIGRP, Metric được tính dựa trên các thành phần tương tự như IGRP.
+	- Bandwidth (Kbps).
+	- Delay (10 microseconds).
+	- Reliability.
+	- Loading.
+	- MTU (bytes).
+
+* Tham số K.
+	- K1 = K3 = 1
+	- K2 = K4 = K5 = 0
+
+* Metric được tính bằng công thức:
+![metric_1](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/metric_1.png)
+
+* Mỗi loại Interface sẽ có các giá trị Bandwidth và Delay khác nhau.
+
+|Loại Interface|Bandwidth(Kbps)|Delay(10microsecond)|
+|:----|----:|----:|
+|Serial|1544|2000|
+|Ethernet|10000|100|
+|Fast Ethernet|100000|10|
+|Loopback|8000000|500|
+
+* Ví dụ:
+![metric_2](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/metric_2.png)
+
+* Kiểm tra các thông số của Interface bằng lệnh.
+```
+Router#show interface [interface-name]
+```
+
+![metric_3](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/metric_3.png)
+
+
 
 ---
 

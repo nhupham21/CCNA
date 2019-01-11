@@ -167,7 +167,7 @@
 <a name="bauchon"></a>
 ###### 2.3.1.3. Bầu chọn DR - BDR - DROther
 * Việc bầu chọn DR - BDR diễn ra trong 1 segment mạng.
-* Khi khởi động một tiến trình OSPF, Router sẽ lắng nghe các Hello Packet từ các Router khác. Nếu hết **Dead Interval Timer* mà không nhận được Hello Packet nào, nó sẽ tự nâng mình là DR.
+* Khi khởi động một tiến trình OSPF, Router sẽ lắng nghe các Hello Packet từ các Router khác. Nếu hết **Dead Interval Timer** mà không nhận được Hello Packet nào, nó sẽ tự nâng mình là DR.
 * Việc bầu chọn như sau:
 	- Xét **Priority**:
 		+ Priority được cấu hình trên Interface tham gia vào OSPF trong Segment.
@@ -181,7 +181,7 @@
 		+ Các Router còn lại có Priority thấp hơn sẽ là DROther. Các Router có Priority = 0, không tham gia bầu chọn, tức là cũng trở thành DROther.
 	
 	- Xét **Router ID**: nếu Priority chưa được cấu hình thì xét đến Router ID. 
-		+ Lưu ý: **Khi dùng Router ID để bầu chọn DR,BDR, các Router ID được chọn từ Loopback sẽ không có hiệu lực**.
+		+ Lưu ý: **Khi dùng Router ID để bầu chọn DR,BDR, các Router ID được chọn từ Loopback sẽ không có hiệu lực**. Như vậy, lức đó, các interface đang active hoặc Router ID cấu hình bằng tay sẽ có hiệu lực.
 		+ Router có Router ID cao nhất sẽ là DR.
 		+ Router có Router ID cao thứ hai sẽ là BDR.
 		+ Các Router còn lại sẽ là DROther.
