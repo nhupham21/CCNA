@@ -46,7 +46,7 @@
 	- OSPF (Open Shortest Path First).
 	- IS-IS (Intermediate System to Intermediate System)
 * Tổng quan.
-	- Mỗi Router chạy Link-state Protocol hình thành thông tin về Router, các link kết nối trực tiếp với nó và trạng thái của các link này. Thông tin này được gửi đến tất cả các Router trong network bằng **Mutlicast Message**. Mỗi Router giữ một bản copy các thông tin này, nhưng không thay đổi nó. Từ đó mỗi Router sẽ có được toàn bộ được Bức tranh Network Topology. Mỗi router sẽ tự tính toán độc lập đường đi tốt nhất đến một mạng nào đó.
+	- Mỗi Router chạy Link-state Protocol hình thành thông tin về Router, các link kết nối trực tiếp với nó và trạng thái của các link này. Thông tin này được gửi đến tất cả các Router trong network bằng **Multicast Message**. Mỗi Router giữ một bản copy các thông tin này, nhưng không thay đổi nó. Từ đó mỗi Router sẽ có được toàn bộ được Bức tranh Network Topology. Mỗi router sẽ tự tính toán độc lập đường đi tốt nhất đến một mạng nào đó.
 	- Link-state Protocol dựa trên thuật toán Dijkstra để tìm đường đi tốt nhất.
 * Benefit.
 	- Hội tụ nhanh.
@@ -93,7 +93,7 @@
 * Để phục vụ các hệ thống mạng lớn hơn, OSPF hỗ trợ sử dụng cho "**Hierarchical Topology**" hay Mô hình phân cấp. Với kỹ thuật này, AS không còn là một cấu trúc đơn, phẳng (flat structure) của nhiều Router kết nối lại với nhau. Thay vào đó, AS sẽ được chia thành nhiều kiến trúc, gọi là ***Area***. Mỗi Area sẽ chứa một số lượng các Router và Mạng liên tục nhau. Các Area này được đánh số và được quản lý độc lập bởi các Router trong Area. Có thể xem các Area như là các "AS con" (sub-AS), các sub-AS nằm trong AS. 
 * Trong chương trình CCNA, người ta phân chia 2 loại Area chính trong mô hình phân cấp của OSPF.
 	- **Backbone Area** hay còn gọi là **Area 0**: là vùng "Xương sống" của OSPF. Là vùng kết nối các Area khác với nhau. Hay nói cách khác, các Area muốn trao đổi được với nhau, đều phải thông qua Backbone Area, hoặc dùng kỹ thuật **Virtual Link** (chương trình CCNP). Trong hệ thống sử dụng OSPF, chỉ có một Backbone Area duy nhất.
-	- **Non-Backbone Area**: các vùng được khác Backbone Area. Được đánh số. Dựa vào chức năng của các Non-Backbone Area mà người ta cũng chia thành các Area (chương trình CCNP).
+	- **Non-Backbone Area**: các vùng được khác Backbone Area. Được đánh số. Dựa vào chức năng của các Non-Backbone Area mà người ta cũng chia thành các Area khác nhau (chương trình CCNP).
 ![hierarchical_1](https://github.com/nhuhp/CCNA/blob/master/OSPF/img/hierarchical_1.png)
 
 * Các Router nằm trong một Area chỉ trao đổi và duy trì LSDB về các Router và mạng trong Area đó. 

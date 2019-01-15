@@ -4,7 +4,7 @@
 > 
 > Thực hiện: **Phạm Hoàng Nhu**
 > 
-> Cập nhật lần cuối: **10/01/2019**
+> Cập nhật lần cuối: **14/01/2019**
 
 ### Mục lục
 [1. Tổng quan về EIGRP](#tongquan)
@@ -20,36 +20,34 @@
 
 [5. Cấu hình EIGRP](#cauhinh)
 
-[6. Passive-interface trong EIGRP](#passiveinterface)
+[6. Load Balancing trong EIGRP](#loadbalancing)
 
-[7. Authentication trong EIGRP](#authentication)
+[7. Passive-interface trong EIGRP](#passiveinterface)
+
+[8. Authentication trong EIGRP](#authentication)
 
 ---
 
 <a name="tongquan"></a>
 ### 1. Tổng quan về EIGRP
-* Lịch sử.
-	- 
-
-* Tổng quan.
-	- Là IGP.
-	- Là giao thức định tuyến độc quyền của Cisco.
-	- Là Advanced Distance Vector Routing Protocol.
-		+ Thiết lập quan hệ với các Router láng giềng.
-		+ Gửi các thay đổi trong các gói Update.
-	- Hội tụ rất nhanh.
-	- Hỗ trợ mạng Classless với các kỹ thuật VLSM, Route Summarization,...
-	- Sử dụng Reliable Transport Protocol (RTP) của Cisco để vận chuyển các EIGRP Packet đến các Neighbor.
-	- Sử dụng địa chỉ Multicast (224.0.0.10) và Unicast để trao đổi thông tin định tuyến.
-	- Protocol ID number = 88.
-	- AD = 90.
-	- Hỗ trợ nhiều Protocol Network-layer: IP, Appletalk, ...
-	- Có thể Load Balancing trên những đường có Metric không bằng nhau.
-	- Sử dụng thuật toán DUAL để tính toán đường đi tốt nhất.
-	- Sử dụng 3 bảng để lưu trữ thông tin:
-		+ Neighbor Table: Chứa thông về EIGRP Neighbor.
-		+ Topology Table: Chứa thông tin định tuyến được học tuyến các EIGRP Neighbor.
-		+ Routing Table: Chứa đường đi tốt nhất.
+* Là IGP.
+* Là giao thức định tuyến độc quyền của Cisco.
+* Là Advanced Distance Vector Routing Protocol.
+	- Thiết lập quan hệ với các Router láng giềng.
+	- Gửi các thay đổi trong các gói Update.
+* Hội tụ rất nhanh.
+* Hỗ trợ mạng Classless với các kỹ thuật VLSM, Route Summarization,...
+* Sử dụng Reliable Transport Protocol (RTP) của Cisco để vận chuyển các EIGRP Packet đến các Neighbor.
+* Sử dụng địa chỉ Multicast (224.0.0.10) và Unicast để trao đổi thông tin định tuyến.
+* Protocol ID number = 88.
+* AD = 90.
+* Hỗ trợ nhiều Protocol Network-layer: IP, Appletalk, ...
+* Có thể Load Balancing trên những đường có Metric không bằng nhau.
+* Sử dụng thuật toán DUAL để tính toán đường đi tốt nhất.
+* Sử dụng 3 bảng để lưu trữ thông tin:
+	- Neighbor Table: Chứa thông về EIGRP Neighbor.
+	- Topology Table: Chứa thông tin định tuyến được học tuyến các EIGRP Neighbor.
+	- Routing Table: Chứa đường đi tốt nhất.
 
 <a name="rtp"></a>
 ### 2. RTP trong EIGRP
@@ -160,8 +158,94 @@ Router#show interface [interface-name]
 
 ![metric_3](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/metric_3.png)
 
+<a name="cauhinh"></a>
+### 5. Cấu hình EIGRP
+* Bật EIGRP.
+```
+Router(config)#router eigrp [as-number]
+```
+
+* Cấu hình các Mạng tham gia vào EIGRP.
+```
+Router(config-router)#network [network-number]
+```
+
+hoặc
+```
+Router(config-router)#network [network-number] [wildcard-mask]
+```
+
+* Cấu hình No auto-summary
+```
+Router(config-router)#no auto-summary
+```
+
+* Kiểm tra EIGRP trên bảng định tuyến.
+```
+Router#show ip route eigrp
+```
+* Kiểm tra các thông số của EIGRP.
+```
+Router#show ip protocols
+```
+
+<a name="loadbalancing/"></a>
+### 6. Load Balancing trong EIGRP
+* Mặc định, EIGRP có thể hỗ trợ cân bằng tải trên 4 đường có Metric bằng nhau.
+* Ngoài ra, một trong các tính năng của EIGRP là hỗ trợ cân bằng tải đối với những đường có Metric không bằng nhau. Tính năng này chỉ áp dụng cho Successor và Feasible Successor.
+* Điều kiện để EIGRP hỗ trợ cân bằng tải trên những đường có Metric không bằng nhau:
+	- Các Route có FD < **Variance** X FDmin
+
+* Có thể điều chỉnh giá trị **Variance** này bằng lệnh.
+```
+Router(config)#router eigrp [as-number]
+Router(config-router)#variane [<1-128>]
+```
 
 
+<a name="passiveinterface"></a>
+### 7. Passive-interface trong EIGRP
+* Tương tự như OSPF, các Router sẽ không gửi các Hello Packet ra các interface được cấu hình Passive-interface. Do đó, ngăn chặn thiết lập quan hệ Adjacency trên các interface này.
+* Cấu hình.
+```
+Router(config)#router eigrp [as-number]
+Router(config-router)#passive-interface [interface-name]
+```
+
+<a name="authentication"></a>
+### 8. Authentication trong EIGRP
+* EIGRP sử dụng MD5 Authentication.
+* Cấu hình Authentication.
+	- Tạo **Key chain**. Key chain không cần giống nhau giữa các Router.
+	```
+	Router(config)#key chain [key-chain-name]
+	```
+	
+	- Tạo **KeyID**. KeyID phải giống nhau giữa các Router.
+	```
+	 Router(config-keychain)#key [keyID]
+	```
+	
+	- Tạo **Key String**. Key String dùng để xác thực giữa các Router và phải giống nhau giữa các Router.
+	```
+	Router(config-keychain-key)#key-string [keystring]
+	```
+	
+	- Thiết lập **Time frame** cho Key.
+	```
+	Router(config-keychain-key)#accept-lifetime start_time {infinite | end_time | duration seconds}
+	
+	Router(config-keychain-key)#send-lifetime start_time {infinite | end_time | duration seconds}
+	```
+	
+	- Enable trên interface tham gia EIGRP.
+	```
+	Router(config)#interface [interface-name]
+	
+	Router(config-if)#ip authentication mode eigrp [as-number] md5
+	
+	Router(config-if)#ip authentication key-chain eigrp [as-number] [key-chain-name]
+	```
 ---
 
 ### Tài liệu tham khảo:
@@ -172,6 +256,9 @@ Router#show interface [interface-name]
 
 [3] RTP in EIGRP. http://packetlife.net/blog/2009/jan/17/rtp-eigrp/
 
+[4] Understanding EIGRP. http://kwallaceccie.com/eigrp-1/
+
+[5] EIGRP Authentication. https://study-ccna.com/eigrp-authentication-load-balancing/
 
 ---
 
