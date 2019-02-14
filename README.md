@@ -21,7 +21,7 @@ Computer Networking A Top Down Approach 6th Edition
 ## [9. OSPF](https://github.com/nhuhp/CCNA/tree/master/OSPF)
 ## [10. EIGRP](https://github.com/nhuhp/CCNA/tree/master/EIGRP)
 ## [11. Layer 2 Switching](https://github.com/nhuhp/CCNA/tree/master/Layer_2_Switching)
-## 12. VLANs and InterVLAN Routing 
+## [12. VLANs and InterVLAN Routing](https://github.com/nhuhp/CCNA/tree/master/VLANs_and_InterVLAN_Routing)
 ## 13. Enhanced Switched Technologies
 ## 14. IP Services
 ## 15. Security

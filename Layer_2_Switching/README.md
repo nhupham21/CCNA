@@ -128,6 +128,7 @@
 ![camtable_1](https://github.com/nhuhp/CCNA/blob/master/Layer_2_Switching/img/camtable_1.png)
 
 * CAM Table hay còn được gọi là MAC Access Table.
+
 ![camtable_2](https://github.com/nhuhp/CCNA/blob/master/Layer_2_Switching/img/camtable_2.png)
 
 <a name="switchingdevices"></a>
@@ -150,7 +151,7 @@
 <a name="forwardfilter"></a>
 #### 3.2. Forward/Forward/Filter Decision
 
-<a name="forwardframes">
+<a name="forwardframes"></a>
 ##### 3.2.1. Forward Frames
 * Khi một frame đi tới switch từ một Interface, **Destination MAC** của frame đó sẽ được so sánh với các Entry trong bảng MAC.
 ![forward_1](https://github.com/nhuhp/CCNA/blob/master/Layer_2_Switching/img/forward_1.png)
