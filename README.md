@@ -26,6 +26,6 @@ Computer Networking A Top Down Approach 6th Edition
 ## 14. IP Services
 ## 15. Security
 ## 16. NAT
-## 17. IPv6
+## [17. IPv6](https://github.com/nhuhp/CCNA/tree/master/IPv6)
 ## 18. Troubleshooting IP, IPv6 and VLANs
 ## 19. Wide Area Networks
