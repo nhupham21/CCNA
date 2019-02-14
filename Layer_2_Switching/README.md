@@ -178,7 +178,7 @@
 * Switch sử dụng một số Protocol như Spanning Tree Protocol (STP) để chống hiện tượng Loop gây giảm hiệu suất của hệ thống.
 
 <a name="phuongthucchuyenmach"></a>
-4. Các phương thức chuyển mạch chính trên Cisco Switch
+### 4. Các phương thức chuyển mạch chính trên Cisco Switch
 * Có 3 phương thức chuyển mạch trên Cisco Switch:
 	- Store and Forward
 	- Cut-Through
