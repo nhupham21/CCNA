@@ -4,7 +4,7 @@
 > 
 > Thực hiện: **Phạm Hoàng Nhu**
 > 
-> Cập nhật lần cuối: **12/02/2019**
+> Cập nhật lần cuối: **13/03/2019**
 
 ### Mục lục
 [1. Tổng quan về IPv6](#tongquan)
@@ -279,7 +279,10 @@ x:x:x:x:x:x:x:x
 	- 4 bit kế tiếp dùng cho trường **Scope**. Trường Scope định nghĩa phạm vi mà Router được phép forward Multicast Packet.
 	- 112 bit còn lại dùng cho **Group ID**.
 
-* Trường Flag có 4 bit.0 R P T
+* Trường Flag có 4 bit.
+```
+0 R P T
+```
 	- 0 : reserved, được khởi tạo bằng 0.
 	- R : rendezvous point. RFC3956.
 	- P : network prefix. RFC3306. 
@@ -302,7 +305,7 @@ x:x:x:x:x:x:x:x
 * Solicited-node Multicast Address được tạo một cách tự động bằng cách sử dụng cơ chế mapping đặc biệt giữa Unicast Address của thiết bị với Solicited-node Multicast prefix **ff02:0:0:0:0:1:ff00::/104**.
 * Solicited-node Multicast Address được tạo một cách tự động cho mỗi Unicast Address trên thiết bị.
 
-<a name="anycastaddress">
+<a name="anycastaddress"></a>
 #### 4.3. Anycast Address
 * **Anycast Address là địa chỉ có thể gán có nhiều hơn một Interface (thường là trên những thiết bị khác nhau). Nói cách khác, nhiều thiết bị có thể có cùng một Anycast Address.
 * Một Packet được gửi đến một Anycast Address, sẽ được định tuyến tới Interface gần nhất (nearest) mang địa chỉ đó, dựa trên Bảng định tuyến của Router.
