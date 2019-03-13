@@ -7,10 +7,10 @@
 > Cập nhật lần cuối: **13/03/2019**
 
 ### Mục lục
-[1. Tổng quan về IPv6](#tongquan)
-- [1.1. Lịch sử](#lichsu)
-- [1.2. Không gian IP](#khonggian)
-- [1.3. Các tính năng của IPv6](#tinhnang)
+[1. Tổng quan về IPv6](https://github.com/nhuhp/CCNA/tree/master/IPv6/1_Tong_quan_IPv6)
+- [1.1. Lịch sử](https://github.com/nhuhp/CCNA/tree/master/IPv6/1_Tong_quan_IPv6#lichsu)
+- [1.2. Không gian IP](https://github.com/nhuhp/CCNA/tree/master/IPv6/1_Tong_quan_IPv6#khonggian)
+- [1.3. Các tính năng của IPv6](https://github.com/nhuhp/CCNA/tree/master/IPv6/1_Tong_quan_IPv6#tinhnang)
 
 [2. IPv6 Header](#header)
 - [2.1. IPv6 Header](#ipv6header)
