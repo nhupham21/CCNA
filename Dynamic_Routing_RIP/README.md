@@ -75,7 +75,7 @@
 <a name="nguyenlyhoatdong"></a>
 #### 3.2. Nguyên lý hoạt động của RIP
 * Khi chưa cấu hình định tuyến, bảng định tuyến của các Router chỉ chứa các lớp mạng connected.
-![rip_connected](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_connected.png)
+![rip_connected](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_connected.png)
 
 * Khi cấu hình định tuyến RIP, các Router kết nối trực tiếp sẽ trao đổi các gói tin với nhau, định kỳ 30s/lần. Gói tin này chứa thông tin (hoặc một phần) bản định tuyến của Router gửi đi.
 
@@ -88,44 +88,44 @@
 
 * Quá trình hoạt động cụ thể như sau (quá trình được theo dõi bằng cách capture các gói tin bằng Wireshark):
 	- Cấu hình RIP:
-	![rip_config](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_config.png)
+	![rip_config](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_config.png)
 
 	- Khi cấu hình RIP, Router R1 sẽ gửi RIP Request đến địa chỉ Multicast 224.0.0.9 ra các interface kết nối để yêu cầu các Router láng giềng gửi bảng định tuyến cho nó.  
-	![rip_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_1.png)
+	![rip_1](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_1.png)
 	
 	- Và cứ 30s/lần, nó sẽ gửi RIP Response đến 224.0.0.9, chứa thông tin bảng định tuyến của nó. 
-	![rip_2](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_2.png)
+	![rip_2](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_2.png)
 	
 	- Router 2, khi cấu hình RIP, cũng sẽ gửi RIP Request đến 224.0.0.9, đi ra các interface kết nối.
-	![rip_3](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_3.png)
+	![rip_3](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_3.png)
 	
 	- Khi đó, Router 1 và Router 2 sẽ đồng thời gửi cho nhau RIP Response chứa thông tin bảng định tuyến của chúng. 
 		+ Khi nhận đươc thông tin bảng định tuyến của Router láng giềng, chúng sẽ lập tức cập nhật lại bảng định tuyến. 
 		+ Những mạng nào đã có trong bảng định tuyến sẽ được giữ nguyên.
-	![rip_4](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_4.png)
+	![rip_4](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_4.png)
 	
 	- Cứ như thế, cứ 30s/lần, các Router lại gửi RIP Response đến 224.0.0.9 để cập nhật bảng định tuyến.
-	![rip_5](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_5.png)
+	![rip_5](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_5.png)
 	
 	- Quá trình diễn ra tương tự đối với Router R3. Lưu ý, Router R1 không gửi bảng định tuyến để Router R3 vì R3 không phải là Router kết nối trực tiếp với R1. 
-	![rip_6](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_6.png)
+	![rip_6](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_6.png)
 	
-	![rip_7](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_7.png)
+	![rip_7](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_7.png)
 	
 	- Router R2 gửi RIP Response cho Router R3.
-	![rip_8](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_8.png)
+	![rip_8](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_8.png)
 	
 	- Router R1 gửi RIP Response cho Router R1.
-	![rip_9](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_9.png)
+	![rip_9](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_9.png)
 	
 	- Cuối cùng, bảng định tuyến của các Router sẽ như sau.
-	![rip_after](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_after.png)
+	![rip_after](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_after.png)
 	
 <a name="metric"></a>
 #### 3.3. Cách tính Metric trong RIP
 * Đối với RIP, metric được tính bằng Hop-count. Nghĩa là số node layer 3 trên đường đi đến đích. 
 * Metric bắt đầu từ 0 cho các mạng connected. Metric sẽ tăng lên **1** khi qua một node.	
-![rip_metric](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_metric.png)
+![rip_metric](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_metric.png)
 
 <a name="quytacchongloop"></a>
 #### 3.4. Bộ quy tắc chống loop của RIP
@@ -133,16 +133,16 @@
 <a name="looptrongrip"></a>
 ##### 3.4.1. Loop trong RIP
 * Giả sử R3 mất mạng 10.4.0.0, trong bảng định tuyến chỉ còn 10.1.0.0, 10.2.0.0, 10.3.0.0.
-![rip_loop_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_loop_1.png)
+![rip_loop_1](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_loop_1.png)
 
 * R2 gửi Update, sẽ gửi lại route đến 10.4.0.0 cho R3 và tăng metric của route này. R3 sẽ học thêm mạng 10.4.0.0 thông qua cổng E0.
-![rip_loop_2](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_loop_2.png)
+![rip_loop_2](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_loop_2.png)
 
 * Tiếp theo, R3 cập nhật bảng định tuyến và gửi cho R2. Lúc này mạng 10.4.0.0 được đưa đến R2 với metric bằng 3.
-![rip_loop_3](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_loop_3.png)
+![rip_loop_3](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_loop_3.png)
 
 * Sau đó, R2 gửi bảng định tuyến tới các Router láng giềng.
-![rip_loop_4](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_loop_4.png)
+![rip_loop_4](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/rip_loop_4.png)
 
 * Cứ tiếp tục như thế thì bảng định tuyến của các Router sẽ thay đổi Metric liên tục. Các route liên tục gửi theo vòng tròn, tạo thành Loop trong mạng.
 * Hiện tượng loop ảnh hưởng đến CPU, performance của thiết bị, khiến hệ thống không hoạt động được.
@@ -168,18 +168,18 @@
 * Nguyên tắc: *Một router sẽ không quảng bá một route trở lại interface mà nó đã học route này từ đó.*
 * Mô tả:
 	- R3 kết nối trực tiếp với 10.4.0.0/24. Các Router đều chạy RIP, R3 quảng bá mạng 10.4.0.0/24 cho các Router còn lại. R2 nhận được route đến 10.4.0.0/24, cập nhật bảng định tuyến và tiếp tục quảng bá đến R1.
-	![split_horizon_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/split_horizon_1.png)
+	![split_horizon_1](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/split_horizon_1.png)
 	
 	- Ta thấy rằng, R2 gửi bảng định tuyến của mình, bao gồm cả mạng 10.4.0.0/24 cho R1 thông qua cổng E0. Khi R1 cập nhật bảng định tuyến, và tiếp tục gửi bảng định tuyến cho R2, Split Horizon sẽ ngăn cản R1 quảng bá 10.4.0.0/24 ngược lại cho R2 thông qua cổng E0 của mình.
-	![split_horizon_2](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/split_horizon_2.png)
+	![split_horizon_2](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/split_horizon_2.png)
 
 	- Gói tin RIP Response bắt được trên cổng E0 của R1.
-	![split_horizon_3](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/split_horizon_3.png)
+	![split_horizon_3](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/split_horizon_3.png)
 	
 	- Cơ chế diễn ra tương tự với mạng 10.3.0.0/24.
 	
 * Split Horizon mặc định enable trên interface. Dùng lệnh "**show ip interface [tên_interface]**" để kiểm tra.
-![split_horizon_4](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/split_horizon_4.png)
+![split_horizon_4](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/split_horizon_4.png)
 
 * Cấu hình:
 	```
@@ -193,7 +193,7 @@
 * Nguyên tắc: *Khi một Router xác định được một route connect của nó unreachable, nó sẽ quảng bá route này với infinite metric (metric = 16). Những Router nào nhận được quảng bá này, sẽ xét route bị down và loại nó ra khỏi bảng định tuyến của mình.*
 * Mô tả:
 	- Giả sử mạng 10.4.0.0/24 kết nối với R3 unreachable. R3 sẽ chuyển metric của route tới 10.4.0.0/24 thành 16 và quảng bá một "Poisoning Message" cho R2. 
-	![routepoisoning_1](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/routepoisoning_1.png)
+	![routepoisoning_1](https://github.com/nhupham21/CCNA/blob/master/Dynamic_Routing_RIP/img/routepoisoning_1.png)
 	
 	- Gói tin RIP Response bắt được trên cổng E0 của R3.
 	![routepoisoning_2](https://github.com/nhuhp/CCNA/blob/master/Dynamic_Routing_RIP/img/routepoisoning_2.png)
