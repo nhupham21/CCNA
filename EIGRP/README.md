@@ -54,7 +54,7 @@
 * EIGRP gửi các message mà không sử dụng UDP hay TCP. Thay vào đó, nó sử dụng một Protocol gọi là **Reliable Transport Protocol** (RTP) của Cisco, để giao tiếp với các EIGRP Neighbor. Tránh nhầm lẫn với **Real-Time Transport Protocol** (cũng viết tắt là RTP) được dùng trong VoIP.
 * Reliability là tính năng quan trọng của Protocol này, nó được thiết kế để có thể cho phép vận chuyển các gói Update nhanh chóng và theo dõi quá trình nhận dữ liệu.
 * Nó cung cấp cơ chế Sequencing và Acknowledgment cho các EIGRP Packet truyền giữa các EIGRP Neighbor mà không có thêm các Windowing hay Congestion Control (Điều khiển Tắc nghẽn), tức là chỉ có 1 Packet có thể gửi đi tại 1 thời điểm.
-![rtp](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/rtp.png)
+![rtp](https://github.com/nhupham21/CCNA/blob/master/EIGRP/img/rtp.png)
 
 <a name="nguyenlyhoatdong"></a>
 ### 3. Nguyên lý hoạt động của EIGRP
@@ -75,14 +75,14 @@
 ```
 Router#show ip eigrp neighbors
 ```
-![neighborstable](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/neighborstable.png)
+![neighborstable](https://github.com/nhupham21/CCNA/blob/master/EIGRP/img/neighborstable.png)
 
 <a name="duavaobangtopolpgy"></a>
 #### 3.2. Đưa vào bảng Topology
 * EIGRP định nghĩa một số khái niệm để tính toán đường đi.
 	- **Feasible Distance** (FD): là Metric của Route tính từ Router đang xét đến đích.
 	- **Advertised Distance** (AD) hoặc **Reported Distance** (RD): là Metric của Route tính từ Neighbor của Router đang xét đến đích.
-	![topology_1](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/topology_1.png)
+	![topology_1](https://github.com/nhupham21/CCNA/blob/master/EIGRP/img/topology_1.png)
 	
 	- **Successor**: Route có Metric tốt nhất đến mạng đích. Route này sẽ được đặt vào bảng định tuyến.
 	- **Feasible Successor**: Route dự phòng trong trường Successor bị down. Router này sẽ được đặt trong bảng Topology.
@@ -92,11 +92,11 @@ Router#show ip eigrp neighbors
 		+ Route có AD nhỏ hơn FDmin: AD < FDmin.
 
 * Sau khi thiết lập Adjacency, các Router sẽ tính toán FD và AD của mỗi mạng mà nó có thể tới.
-![topology_2](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/topology_2.png)
+![topology_2](https://github.com/nhupham21/CCNA/blob/master/EIGRP/img/topology_2.png)
 
 * Và sẽ đưa vào bảng Topology.
 
-![topology_3](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/topology_3.png)
+![topology_3](https://github.com/nhupham21/CCNA/blob/master/EIGRP/img/topology_3.png)
 
 * Dùng lệnh để show các Successor và Feasible Successor. 
 ```
@@ -108,16 +108,16 @@ hoặc lệnh này để show tất các Route có thể có.
 Router#show ip eigrp topology all-links
 ```
 
-![topology_4](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/topology_4.png)
+![topology_4](https://github.com/nhupham21/CCNA/blob/master/EIGRP/img/topology_4.png)
 
 <a name="timduongdi"></a>
 #### 3.3. Tìm đường đi
 * EIGRP dùng **thuật toán DUAL**, để chọn Successor và Feasible Successor.
 * Successor sẽ được đưa vào bảng định tuyến.
-![successor](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/successor.png)
+![successor](https://github.com/nhupham21/CCNA/blob/master/EIGRP/img/successor.png)
 
 * Nếu có Feasible Successor, thì sẽ được thể hiện trên bảng Topology.
-![feasible_successor](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/feasible_successor.png)
+![feasible_successor](https://github.com/nhupham21/CCNA/blob/master/EIGRP/img/feasible_successor.png)
 
 * Trong trường hợp Successor bị down, Feasible Successor sẽ lên làm Successor. Nếu không có Feasible Successor, các Router sẽ tính toán lại đường đi tốt nhất.
 * EIGRP có cơ chế **Preempt**. Nghĩa là Successor down, sau đó up lại thì vẫn tiếp tục được làm Successor.
@@ -137,7 +137,7 @@ Router#show ip eigrp topology all-links
 
 * Metric được tính bằng công thức:
 
-![metric_1](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/metric_1.png)
+![metric_1](https://github.com/nhupham21/CCNA/blob/master/EIGRP/img/metric_1.png)
 
 * Mỗi loại Interface sẽ có các giá trị mặc định Bandwidth và Delay khác nhau.
 
@@ -149,14 +149,14 @@ Router#show ip eigrp topology all-links
 |Loopback|8000000|500|
 
 * Ví dụ:
-![metric_2](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/metric_2.png)
+![metric_2](https://github.com/nhupham21/CCNA/blob/master/EIGRP/img/metric_2.png)
 
 * Kiểm tra các thông số của Interface bằng lệnh.
 ```
 Router#show interface [interface-name]
 ```
 
-![metric_3](https://github.com/nhuhp/CCNA/blob/master/EIGRP/img/metric_3.png)
+![metric_3](https://github.com/nhupham21/CCNA/blob/master/EIGRP/img/metric_3.png)
 
 <a name="cauhinh"></a>
 ### 5. Cấu hình EIGRP
